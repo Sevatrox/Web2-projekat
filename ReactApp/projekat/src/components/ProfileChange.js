@@ -22,7 +22,6 @@ const ProfileChange = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        //localStorage.clear('token');
         const validationErrors = {};
 
         if (username.length < 3 || username.length > 20) {

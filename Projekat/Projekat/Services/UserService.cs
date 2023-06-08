@@ -100,6 +100,19 @@ namespace Projekat.Services
             return _mapper.Map<UserRegisterDto>(_dataContext.Users.First(x => x.Email == email));
         }
 
+        public List<UserRegisterDto> GetByType(int type)
+        {
+            UserType filterType;
+            if (type == 0)
+                filterType = UserType.ADMIN;
+            else if (type == 1)
+                filterType = UserType.BUYER;
+            else
+                filterType = UserType.SELLER;
+
+            return _mapper.Map<List<UserRegisterDto>>(_dataContext.Users.ToList().FindAll(x => x.Type == filterType));
+        }
+
         public UserRegisterDto UpdateUser(long id, UserRegisterDto newUser)
         {
             User noviUser = _mapper.Map<User>(newUser);

@@ -46,6 +46,13 @@ namespace Projekat.Controllers
             return Ok(_userService.GetByEmail(email));
         }
 
+        [HttpGet("type/{type}")]
+        [Authorize(Roles = "admin")]
+        public IActionResult GetUserByType(int type)
+        {
+            return Ok(_userService.GetByType(type));
+        }
+
         [HttpPut("{id}")]
         [Authorize(Roles = "kupac,admin,prodavac")]
         public IActionResult UpdateUser(long id, [FromBody] UserRegisterDto userRegisterDto)

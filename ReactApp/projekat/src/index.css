@@ -260,3 +260,48 @@ cursor: pointer;
   font-size: 18px;
   margin: 0;
 }
+
+.verification-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.verification-content {
+  text-align: center;
+}
+
+.verification-title {
+  font-size: 25px;
+  color: red;
+}
+
+.verification-table {
+  margin-top: 15px;
+  border-collapse: collapse;
+  width: 100%; /* Adjust the width as needed */}
+
+.verification-table th,
+.verification-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 18px; /* Adjust the font size as needed */
+}
+
+.verification-button {
+  text-decoration: none;
+  margin-top: 15px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px; /* Adjust the padding as needed */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px; /* Adjust the font size as needed */
+}
+
+.verification-button:hover {
+  color: #00ffff;
+}

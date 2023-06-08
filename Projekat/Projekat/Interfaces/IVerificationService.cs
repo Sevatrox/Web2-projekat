@@ -6,5 +6,7 @@ namespace Projekat.Interfaces
     {
         VerificationDto CreateVerification(long userId);
         VerificationDto GetByUserId(long userId);
+        List<VerificationDto> GetAll();
+        VerificationDto UpdateVerification(long id, VerificationDto newVerification);
     }
 }

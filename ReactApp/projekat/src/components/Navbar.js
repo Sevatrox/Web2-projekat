@@ -18,7 +18,7 @@ const Navbar = () => {
       {
         CheckVerification();
       }
-    }, []);
+    }, [role]);
 
     const CheckVerification = async(userId) => {
       const responseUser = await GetUserFromBackend(GetEmail());
