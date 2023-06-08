@@ -11,6 +11,7 @@ const Home = () => {
       localStorage.removeItem("email");
       localStorage.removeItem("user");
       localStorage.removeItem("verification")
+      localStorage.removeItem('item');
       history("/");
       window.location.reload();
     };

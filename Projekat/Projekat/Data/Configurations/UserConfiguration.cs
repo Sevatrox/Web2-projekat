@@ -22,8 +22,6 @@ namespace Projekat.Data.Configurations
 
             builder.Property(x => x.Email).HasMaxLength(30);//kazem da je maks duzina 30 karaktera
 
-            builder.Property(x => x.Password).HasMaxLength(30);//kazem da je maks duzina 30 karaktera
-
             builder.Property(x => x.Address).HasMaxLength(30);//kazem da je maks duzina 30 karaktera
 
             builder.Property(x => x.Email).HasMaxLength(30);//kazem da je maks duzina 30 karaktera

@@ -244,8 +244,8 @@ cursor: pointer;
 
 .verification-box {
   align-self: flex-start;
-  margin-top: -560px;
-  margin-left: 500px;
+  margin-top: -570px;
+  margin-left: 540px;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 200px;
@@ -303,5 +303,119 @@ cursor: pointer;
 }
 
 .verification-button:hover {
+  color: #00ffff;
+}
+
+.add-item {
+  max-width: 450px;
+  margin: 0 auto;
+  text-align: center;
+}
+.add-item label {
+  text-align: left;
+  display: block;
+}
+.add-item h2 {
+  font-size: 25px;
+  color: #f1356d;
+  margin-bottom: 20px;
+}
+.add-item input, .add-item textarea, .add-item select {
+  width: 100%;
+  padding: 6px 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  display: block;
+}
+.add-item a{
+  font-size: 20px;
+  padding: 2px;
+}
+.add-item a:hover {
+  color: #00ffff;
+}
+.add-item button {
+  text-decoration: none;
+  margin-top: 15px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.add-item button:hover {
+  color: #00ffff;
+}
+.add-item .inputType{
+  margin-left: -100px;
+}
+
+.add-item .error {
+  color: red;
+}
+
+.verification-box {
+  align-self: flex-start;
+  margin-top: -570px;
+  margin-left: 540px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.verification-box h2 {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.verification-box p {
+  font-size: 18px;
+  margin: 0;
+}
+
+.items-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.items-content {
+  text-align: center;
+}
+
+.items-title {
+  font-size: 25px;
+  color: red;
+}
+
+.items-table {
+  margin-top: 15px;
+  border-collapse: collapse;
+  width: 120%; /* Adjust the width as needed */}
+
+.items-table th,
+.items-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 18px; /* Adjust the font size as needed */
+}
+
+.items-button {
+  text-decoration: none;
+  margin-top: 0px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px; /* Adjust the padding as needed */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px; /* Adjust the font size as needed */
+}
+
+.items-button:hover {
   color: #00ffff;
 }

@@ -9,5 +9,7 @@
         public string Description { get; set; }
         public string Picture { get; set; }
         public long SellerId { get; set; }
+        public List<Order> Orders { get; set; }
+
     }
 }

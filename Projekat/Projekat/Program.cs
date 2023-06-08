@@ -52,7 +52,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 //builder.Services.AddScoped<IOrderService, UserService>();
-//builder.Services.AddScoped<IItemService, UserService>();
+builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IVerificationService, VerificationService>();
 
 

@@ -1,4 +1,4 @@
-import { BrowserRouter , Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
@@ -14,31 +14,33 @@ import Register from './components/Register';
 import Login from './components/Login';
 import RegisterGmail from './components/RegisterGmail';
 import ProfileChange from './components/ProfileChange';
-//import { useState } from 'react';
+import Items from './components/Items';
+import AddItem from './components/AddItem';
+import ChangeItem from './components/ChangeItem';
 
 function App() {
-
-  //const [isVerified, setIsVerified] = useState(false);
-
   return (
     <BrowserRouter>
       <div className="App">
-        <Navbar/>
+        <Navbar />
         <div className="content">
           <Routes>
-            <Route path="/" element={ <Home/> }/>
-            <Route path='/registracija' element= { <Register/> }/>
-            <Route path='/registracijaGmail' element= { <RegisterGmail/> }/>
-            <Route path='/login' element= { <Login/> }/>
-            <Route path="/profil" element={ <Profile /> }/>
-            <Route path="/izmjenaProfila" element={ <ProfileChange /> }/>
-            <Route path="/porudzbinaKupac" element={ <NewRequestBuyer /> }/>
-            <Route path="/prethodnePorudzbine" element={ <PastRequests /> }/>
-            <Route path="/verifikacija" element={ <Verification /> }/>
-            <Route path="/novePorudzbineProdavac" element={ <NewRequestsSeller /> }/>
-            <Route path="/mojePorudzbine" element={ <MyRequests /> }/>
-            <Route path="/svePorudzbine" element={ <AllRequests /> }/>
-            <Route path="*" element={ <NotFoundPage /> }/>
+            <Route path="/" element={<Home />} />
+            <Route path="/registracija" element={<Register />} />
+            <Route path="/registracijaGmail" element={<RegisterGmail />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/profil" element={<Profile />} />
+            <Route path="/izmjenaProfila" element={<ProfileChange />} />
+            <Route path="/artikli" element={<Items />} />
+            <Route path="/noviArtikal" element={<AddItem />} />
+            <Route path="/izmjenaArtikla" element={<ChangeItem />} />
+            <Route path="/porudzbinaKupac" element={<NewRequestBuyer />} />
+            <Route path="/prethodnePorudzbine" element={<PastRequests />} />
+            <Route path="/verifikacija" element={<Verification />} />
+            <Route path="/novePorudzbineProdavac" element={<NewRequestsSeller />} />
+            <Route path="/mojePorudzbine" element={<MyRequests />} />
+            <Route path="/svePorudzbine" element={<AllRequests />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
       </div>

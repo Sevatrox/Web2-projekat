@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import test from './test.png'
-import { GetUserFromBackend } from "../services/UserService";
-import { SetUser } from "../models/UserModel";
+import { GetUser } from "../models/UserModel";
 import { GetVerification } from "../models/VerificationModel";
 
 const Profile = () => {
@@ -24,6 +23,20 @@ const Profile = () => {
   const [isVerified, setIsVerified] = useState(false);
   const verification = GetVerification();
 
+  useEffect(() => {
+    const temp = GetUser();
+    setUser(temp);
+    if(user.type === "Prodavac")
+    {
+      setIsSeller(true)
+      if(GetVerification() === "Accepted")
+        setIsVerified(true);
+      else
+        setIsVerified(false);
+    }  
+  }, [user.type])
+
+  /*
   useEffect(() => {
     getData();
   }, [])
@@ -48,6 +61,7 @@ const Profile = () => {
     setUser(temp);
     SetUser(temp);
   }
+  */
 
   /*const CheckVerification = async(userId) => {
     const response = await GetVerificationFromBackend(userId);

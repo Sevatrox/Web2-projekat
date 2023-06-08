@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { GetEmail, GetRole, GetToken } from "../models/UserModel";
+import { GetEmail, GetRole, GetToken, SetUser } from "../models/UserModel";
 import { SetVerification } from '../models/VerificationModel';
 import { GetVerificationFromBackend } from '../services/VerificationService';
 import { GetUserFromBackend } from '../services/UserService';
@@ -13,12 +13,28 @@ const Navbar = () => {
 
     useEffect(() => {
       setIsLoggedIn(GetToken() !== null);
+      if(isLoggedIn)
+        getData();
       setRole(GetRole());
       if(role === "prodavac")
       {
         CheckVerification();
       }
-    }, [role]);
+    }, [role, isLoggedIn]);
+
+    const getData = async () => {
+      const response = await GetUserFromBackend();
+      const temp = response.data;
+      if (response.data.type === 1)
+        temp.type = 'Kupac';
+      else if (response.data.type === 2) {
+        temp.type = 'Prodavac'
+      }
+      else
+        temp.type = 'Admin';
+      temp.password = (response.data.password).slice(0, 10).split('').map(() => '*').join('');
+      SetUser(temp);
+    }
 
     const CheckVerification = async(userId) => {
       const responseUser = await GetUserFromBackend(GetEmail());
@@ -50,6 +66,8 @@ const Navbar = () => {
           {isLoggedIn && role === "kupac" && <Link to="/porudzbinaKupac">Nova porudzbina</Link>}
           {isLoggedIn && role === "kupac" && <Link to="/prethodnePorudzbine">Prethodne porudzbine</Link>}
           {isLoggedIn && role === "admin" && <Link to="/verifikacija">Verifikacija</Link>}
+          {isLoggedIn && role === "prodavac" && isVerified && <Link to="/artikli">Artikli</Link>}
+          {isLoggedIn && role === "prodavac" && isVerified && <Link to="/noviArtikal">Dodaj artikal</Link>}
           {isLoggedIn && role === "prodavac" && isVerified && <Link to="/novePorudzbineProdavac">Nove porudzbine</Link>}
           {isLoggedIn && role === "prodavac" && isVerified && <Link to="/mojePorudzbine">Moje porudzbine</Link>}
           {isLoggedIn && role === "admin" && <Link to="/svePorudzbine">Sve porudzbine</Link>}
