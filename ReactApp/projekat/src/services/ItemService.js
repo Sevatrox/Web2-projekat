@@ -20,3 +20,8 @@ export const UpdateItem = async (id, item) =>
 {
     return await axios.put(process.env.REACT_APP_API_URL + '/api/items/' + id, item, config);
 }
+
+export const GetAllItems = async () =>
+{   
+    return await axios.get(process.env.REACT_APP_API_URL + '/api/items/all', config);
+}

@@ -9,5 +9,7 @@ namespace Projekat.Interfaces
         List<ItemDto> GetItemsBySellerId(long sellerId);
         void DeleteItem(long id);
         ItemDto UpdateItem(long id, ItemDto itemDto);
+        List<ItemDto> GetAll();
+        ItemDto UpdateItemAfterOrder(long id, int amount);
     }
 }

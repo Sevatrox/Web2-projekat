@@ -29,8 +29,12 @@ export const GetUsersFromBackendByType = async (type) =>
     return await axios.get(process.env.REACT_APP_API_URL + '/api/users/type/' + type, config);
 }
 
-
 export const UpdateUser = async (id, account) =>
 {
     return await axios.put(process.env.REACT_APP_API_URL + '/api/users/' + id, account, config);
+}
+
+export const GetUserById = async (id) =>
+{   
+    return await axios.get(process.env.REACT_APP_API_URL + '/api/users/id/' + id, config);
 }

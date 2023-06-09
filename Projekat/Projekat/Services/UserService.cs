@@ -113,6 +113,11 @@ namespace Projekat.Services
             return _mapper.Map<List<UserRegisterDto>>(_dataContext.Users.ToList().FindAll(x => x.Type == filterType));
         }
 
+        public UserRegisterDto GetUserById(long id)
+        {
+            return _mapper.Map<UserRegisterDto>(_dataContext.Users.Find(id));
+        }
+
         public UserRegisterDto UpdateUser(long id, UserRegisterDto newUser)
         {
             User noviUser = _mapper.Map<User>(newUser);
@@ -153,5 +158,7 @@ namespace Projekat.Services
             }
             return imageName;
         }
+
+
     }
 }

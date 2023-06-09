@@ -15,7 +15,7 @@ const Home = () => {
       history("/");
       window.location.reload();
     };
-  
+
     return (
       <div className="home">
         <h1>Dobrodosli na pocetnu stranicu!</h1>

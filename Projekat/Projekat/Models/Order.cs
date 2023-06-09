@@ -13,8 +13,8 @@
         public OrderStatus Status { get; set; }
         public long SellerId { get; set; }
         public long BuyerId { get; set; }
-        public string OrderDate { get; set; }
+        public string OrderTime { get; set; }
+        public string OrderArriving { get; set; }
         public List<Item> Items { get; set; }
-
     }
 }

@@ -11,7 +11,7 @@ using Projekat.Data;
 namespace Projekat.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230608184702_CreateInitial")]
+    [Migration("20230609193008_CreateInitial")]
     partial class CreateInitial
     {
         /// <inheritdoc />
@@ -75,6 +75,25 @@ namespace Projekat.Migrations
                     b.ToTable("Items");
                 });
 
+            modelBuilder.Entity("Projekat.Models.ItemsInsideOrder", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ItemId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ItemsInsideOrders");
+                });
+
             modelBuilder.Entity("Projekat.Models.Order", b =>
                 {
                     b.Property<long>("Id")
@@ -96,7 +115,11 @@ namespace Projekat.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<string>("OrderDate")
+                    b.Property<string>("OrderArriving")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -29,6 +29,20 @@ namespace Projekat.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ItemsInsideOrders",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemId = table.Column<long>(type: "bigint", nullable: false),
+                    OrderId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ItemsInsideOrders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -40,7 +54,8 @@ namespace Projekat.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     SellerId = table.Column<long>(type: "bigint", nullable: false),
                     BuyerId = table.Column<long>(type: "bigint", nullable: false),
-                    OrderDate = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    OrderTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderArriving = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,6 +138,9 @@ namespace Projekat.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ItemOrder");
+
+            migrationBuilder.DropTable(
+                name: "ItemsInsideOrders");
 
             migrationBuilder.DropTable(
                 name: "Users");

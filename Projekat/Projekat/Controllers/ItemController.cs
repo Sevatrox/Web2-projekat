@@ -47,5 +47,12 @@ namespace Projekat.Controllers
         {
             return Ok(_itemService.UpdateItem(id, itemDto));
         }
+
+        [HttpGet("all")]
+        [Authorize(Roles = "kupac")]
+        public IActionResult GetAll()
+        {
+            return Ok(_itemService.GetAll());
+        }
     }
 }

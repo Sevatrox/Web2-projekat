@@ -9,6 +9,6 @@ namespace Projekat.Interfaces
         UserRegisterDto GetByEmail(string email);
         List<UserRegisterDto> GetByType(int type);
         UserRegisterDto UpdateUser(long id, UserRegisterDto account);
-
+        UserRegisterDto GetUserById(long id);
     }
 }

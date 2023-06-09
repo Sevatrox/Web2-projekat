@@ -51,10 +51,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddScoped<IUserService, UserService>();
-//builder.Services.AddScoped<IOrderService, UserService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IVerificationService, VerificationService>();
-
 
 
 builder.Services.AddDbContext<DataContext>(options =>

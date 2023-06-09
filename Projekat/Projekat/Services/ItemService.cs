@@ -57,5 +57,20 @@ namespace Projekat.Services
 
             return _mapper.Map<ItemDto>(itemDB);
         }
+
+        public ItemDto UpdateItemAfterOrder(long id, int amount)
+        {
+            Item itemDB = _dataContext.Items.Find(id);
+            itemDB.Amount -= amount;
+            _dataContext.SaveChanges();
+
+            return _mapper.Map<ItemDto>(itemDB);
+        }
+
+
+        public List<ItemDto> GetAll()
+        {
+            return _mapper.Map<List<ItemDto>>(_dataContext.Items.ToList());
+        }
     }
 }

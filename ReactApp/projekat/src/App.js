@@ -17,6 +17,8 @@ import ProfileChange from './components/ProfileChange';
 import Items from './components/Items';
 import AddItem from './components/AddItem';
 import ChangeItem from './components/ChangeItem';
+import MakeRequest from './components/MakeRequest';
+import EmptyRequest from './components/EmptyRequest';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
             <Route path="/noviArtikal" element={<AddItem />} />
             <Route path="/izmjenaArtikla" element={<ChangeItem />} />
             <Route path="/porudzbinaKupac" element={<NewRequestBuyer />} />
+            <Route path="/napraviPorudzbinu/:items" element={<MakeRequest />} />
+            <Route path="/napraviPorudzbinu/" element={<EmptyRequest />} />
             <Route path="/prethodnePorudzbine" element={<PastRequests />} />
             <Route path="/verifikacija" element={<Verification />} />
             <Route path="/novePorudzbineProdavac" element={<NewRequestsSeller />} />
