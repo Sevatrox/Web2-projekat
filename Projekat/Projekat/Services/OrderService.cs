@@ -122,6 +122,11 @@ namespace Projekat.Services
             return _mapper.Map<List<OrderDto>>(orders);
         }
 
+        public List<OrderDto> GetAll()
+        {
+            return _mapper.Map<List<OrderDto>>(_dataContext.Orders.ToList());
+        }
+
         public OrderDto DeleteOrder(long id)
         {
             List<ItemsInsideOrder> itemsInsideOrder = _dataContext.ItemsInsideOrders.ToList().FindAll(x => x.OrderId == id);

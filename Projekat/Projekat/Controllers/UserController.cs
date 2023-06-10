@@ -54,7 +54,7 @@ namespace Projekat.Controllers
         }
 
         [HttpGet("id/{id}")]
-        [Authorize(Roles = "kupac,prodavac")]
+        [Authorize(Roles = "kupac,prodavac, admin")]
         public IActionResult GetUserById(long id)
         {
             return Ok(_userService.GetUserById(id));

@@ -47,6 +47,13 @@ namespace Projekat.Controllers
             return Ok(_orderService.GetPastOrdersBySellerId(sellerId));
         }
 
+        [HttpGet("all")]
+        [Authorize(Roles = "admin")]
+        public IActionResult GetAll()
+        {
+            return Ok(_orderService.GetAll());
+        }
+
         [HttpPut("{id}")]
         [Authorize(Roles = "kupac")]
         public IActionResult DeleteOrder(long id)

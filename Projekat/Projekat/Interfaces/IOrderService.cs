@@ -9,6 +9,7 @@ namespace Projekat.Interfaces
         List<OrderCancelCheckDto> GetOrdersByBuyerId(long buyerId);
         List<OrderDto> GetNewOrdersBySellerId(long sellerId);
         List<OrderDto> GetPastOrdersBySellerId(long sellerId);
+        List<OrderDto> GetAll();
         OrderDto DeleteOrder(long id);
     }
 }

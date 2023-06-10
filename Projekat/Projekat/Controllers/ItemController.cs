@@ -34,7 +34,7 @@ namespace Projekat.Controllers
         }
 
         [HttpGet("byOrder/{orderId}")]
-        [Authorize(Roles = "kupac,prodavac")]
+        [Authorize(Roles = "kupac,prodavac,admin")]
         public IActionResult GetItemsByOrderId(long orderId)
         {
             return Ok(_itemService.GetItemsByOrderId(orderId));

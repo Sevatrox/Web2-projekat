@@ -25,6 +25,12 @@ export const GetPastOrdersBySellerId = async (sellerId) =>
 {   
     return await axios.get(process.env.REACT_APP_API_URL + '/api/orders/pastOrders/' + sellerId, config);
 }
+
+export const GetAllOrders = async () =>
+{   
+    return await axios.get(process.env.REACT_APP_API_URL + '/api/orders/all', config);
+}
+
 export const calculateRemainingMinutes = (order) => {
     const orderArrivingTime = new Date(order.orderArriving);
     const currentTime = new Date();

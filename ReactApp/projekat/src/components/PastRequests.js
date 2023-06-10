@@ -78,7 +78,7 @@ const PastRequests = () => {
                                     <th>Adresa</th>
                                     <th>Status</th>
                                     <th>Vrijeme narudzbe</th>
-                                    <th>Vrijeme narudzbe</th>
+                                    <th>Vrijeme kada stize narudzba</th>
                                     <th>Vrijeme dostave</th>
                                     <th>Otkazivanje narudzbe</th>
                                 </tr>
