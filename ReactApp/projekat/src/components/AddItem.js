@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddItemBackend } from "../services/ItemService";
 import { GetUser } from "../models/UserModel";
+import { itemModel } from "../models/ItemModel";
 
 
 const AddItem = () => {
@@ -12,6 +13,8 @@ const AddItem = () => {
     const [pictureName, setPictureName] = useState('');
     const [picture, setPicture] = useState();
     const [errors, setErrors] = useState({});
+
+    let item = itemModel;
 
     const history = useNavigate();
 
@@ -47,7 +50,7 @@ const AddItem = () => {
         }
 
         //const item = { name, price, amount, description, picture : pictureName, pictureFile : picture };
-        const item = { name, price, amount, description, picture : pictureName, sellerId : GetUser().id };
+        item = { name, price, amount, description, picture : pictureName, sellerId : GetUser().id };
         console.log(item);
         try{
             const response = await AddItemBackend(item);

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { GetItemsByOrderId } from "../services/ItemService";
 import { calculateRemainingMinutes, GetNewOrdersBySellerId } from "../services/OrderService";
-import { GetUser } from "../models/UserModel";
+import { GetUser, userModel } from "../models/UserModel";
 import { GetUserById } from "../services/UserService";
+import { orderModel } from "../models/OrderModel";
+import { itemModel } from "../models/ItemModel";
 
 const NewRequestsSeller = () => {
     const [orders, setOrders] = useState([]);
@@ -13,19 +15,26 @@ const NewRequestsSeller = () => {
 
     const getData = async () => {
         try {
-            const response = await GetNewOrdersBySellerId(GetUser().id);
-            console.log(response.data);
+            let user = userModel;
+            user = GetUser();
+            const response = await GetNewOrdersBySellerId(user.id);
+            let ordersResponse = [orderModel];
+            ordersResponse = response.data;
+
             const ordersWithItems = [];
-            for (const order of response.data) {
+            for (const order of ordersResponse) {
                 const itemsResponse = await GetItemsByOrderId(order.id);
+                let itemsResponseModel = [itemModel];
+                itemsResponseModel = itemsResponse.data;
 
                 const { buyerId } = order;
                 try {
                     const buyerResponse = await GetUserById(buyerId);
+                    let buyerModel = userModel;
+                    buyerModel = buyerResponse.data;
 
-                    const buyer = buyerResponse.data;
-                    const updatedOrder = { ...order, buyer: buyer.username };
-                    const orderWithItems = { ...updatedOrder, items: itemsResponse.data };
+                    const updatedOrder = { ...order, buyer: buyerModel.username };
+                    const orderWithItems = { ...updatedOrder, items: itemsResponseModel };
                     ordersWithItems.push(orderWithItems);
                 } catch (error) {
                     console.error("Desila se greska:", error);

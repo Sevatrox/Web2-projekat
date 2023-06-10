@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { GetItemsByOrderId } from "../services/ItemService";
 import { GetUserById } from "../services/UserService";
-import { GetUser } from "../models/UserModel";
+import { GetUser, userModel } from "../models/UserModel";
 import { GetPastOrdersBySellerId } from "../services/OrderService";
+import { orderModel } from "../models/OrderModel";
+import { itemModel } from "../models/ItemModel";
 
 const MyRequests = () => {
     const [orders, setOrders] = useState([]);
@@ -13,25 +15,35 @@ const MyRequests = () => {
 
     const getData = async () => {
         try {
-            const response = await GetPastOrdersBySellerId(GetUser().id);
-            console.log(response.data);
-            const ordersWithItems = [];
-            for (const order of response.data) {
-                const itemsResponse = await GetItemsByOrderId(order.id);
+            let ordersResponse = orderModel;
+            let user = userModel;
+            user = GetUser();
+
+            const response = await GetPastOrdersBySellerId(user.id);
+            ordersResponse = response.data;
+
+            let ordersWithItems = [];
+
+            for (const order of ordersResponse) {
+                const responseItem = await GetItemsByOrderId(order.id);
+                let itemsResponse = itemModel;
+                itemsResponse = responseItem.data;
 
                 const { buyerId } = order;
                 try {
+                    let buyer = userModel;
                     const buyerResponse = await GetUserById(buyerId);
+                    buyer = buyerResponse.data;
 
-                    const buyer = buyerResponse.data;
                     const updatedOrder = { ...order, buyer: buyer.username };
-                    const orderWithItems = { ...updatedOrder, items: itemsResponse.data };
+                    const orderWithItems = { ...updatedOrder, items: itemsResponse };
                     ordersWithItems.push(orderWithItems);
                 } catch (error) {
                     console.error("Desila se greska:", error);
                     continue;
                 }
             }
+            console.log(ordersWithItems);
             setOrders(ordersWithItems);
         } catch (e) {
             alert("Desila se greska: " + e);

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { UpdateUser } from "../services/UserService";
-import { GetUser } from "../models/UserModel";
+import { GetUser, SetUser, userModel } from "../models/UserModel";
 
 const ProfileChange = () => {
     //const { id } = useParams();
@@ -17,6 +17,7 @@ const ProfileChange = () => {
     const [pictureName, setPictureName] = useState('');
     const [picture, setPicture] = useState();
     const [errors, setErrors] = useState({});
+    let user = userModel;
 
     const history = useNavigate();
 
@@ -57,13 +58,28 @@ const ProfileChange = () => {
           return;
         }
 
-        //const account = { username, email, password, name, surname, date, address, type, picture : pictureName, pictureFile : picture };
-        const account = { username, email, password, name, surname, date, address, picture : pictureName };
-        console.log(account);
+        //user = { username, email, password, name, surname, date, address, type, picture : pictureName, pictureFile : picture };
+        user = { username, email, password, name, surname, date, address, picture : pictureName }
+        console.log(user);
         try{
-            const response = await UpdateUser(id, account);
-            console.log(response);
+            let newUser = userModel;
+            const response = await UpdateUser(id, user);
+            newUser = response.data;
             alert('Uspjesno ste izmjenili profil!')
+
+            let temp = userModel;
+            temp = newUser;
+
+            if (newUser.type === 1)
+              temp.type = 'Kupac';
+            else if (newUser.type === 2) {
+              temp.type = 'Prodavac'
+            }
+            else
+              temp.type = 'Admin';     
+            temp.password = (newUser.password).slice(0, 10).split('').map(() => '*').join('');
+            SetUser(temp);
+
             history("/profil");      
         }
         catch(e){
@@ -76,7 +92,8 @@ const ProfileChange = () => {
         return emailRegex.test(email);
     }
   useEffect ( () => {
-    const account = GetUser();
+    let account = userModel;
+    account = GetUser();
     setId(account.id);
     setUsername(account.username);
     setEmail(account.email);

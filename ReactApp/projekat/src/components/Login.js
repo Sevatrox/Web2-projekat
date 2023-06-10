@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate  } from "react-router-dom";
 import { LoginUser } from "../services/UserService";
-import { SetEmail, SetRole, SetToken } from "../models/UserModel";
+import { SetEmail, SetRole, SetToken, userLoginModel } from "../models/UserModel";
 
 import jwt from 'jwt-decode';
 
@@ -31,7 +31,9 @@ const Login = () => {
         }
 
 
-        const account = { email, password };
+        const account = userLoginModel;
+        account.email = email;
+        account.password = password;    
 
         try{
             const response = await LoginUser(account);

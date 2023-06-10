@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { GetUser } from "../models/UserModel";
+import { GetUser, userModel } from "../models/UserModel";
 import { DeleteOrder, GetOrdersByBuyerId, calculateRemainingMinutes } from "../services/OrderService";
 import { GetItemsByOrderId } from "../services/ItemService";
 import { GetUserById } from "../services/UserService";
+import { orderModel } from "../models/OrderModel";
+import { itemModel } from "../models/ItemModel";
 
 const PastRequests = () => {
     const [orders, setOrders] = useState([]);
@@ -13,19 +15,25 @@ const PastRequests = () => {
 
     const getData = async () => {
         try {
-            const response = await GetOrdersByBuyerId(GetUser().id);
+            let user = userModel;
+            user = GetUser();
+            const response = await GetOrdersByBuyerId(user.id);
+            let ordersResponse = [orderModel];
+            ordersResponse = response.data;
 
             const ordersWithItems = [];
             for (const order of response.data) {
                 const itemsResponse = await GetItemsByOrderId(order.id);
+                let itemsModel = [itemModel];
 
                 const updatedItems = [];
-                for (const item of itemsResponse.data) {
+                for (const item of itemsModel) {
                     const { sellerId } = item;
 
                     try {
                         const sellerResponse = await GetUserById(sellerId);
-                        const seller = sellerResponse.data;
+                        let seller = userModel;
+                        seller = sellerResponse.data;
                         const updatedItem = { ...item, seller: seller.username };
                         updatedItems.push(updatedItem);
                     } catch (error) {

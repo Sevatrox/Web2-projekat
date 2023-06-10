@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GetUser } from "../models/UserModel";
-import { GetItem } from "../models/ItemModel";
+import { GetItem, itemModel } from "../models/ItemModel";
 import { UpdateItem } from "../services/ItemService";
 
 const ChangeItem = () => {
@@ -14,10 +14,12 @@ const ChangeItem = () => {
   const [picture, setPicture] = useState();
   const [errors, setErrors] = useState({});
 
+  let item = itemModel;
+
   const history = useNavigate();
 
   useEffect ( () => {
-    const item = GetItem();
+    item = GetItem();
     setId(item.id);
     setName(item.name);
     setPrice(item.price);
@@ -58,7 +60,7 @@ const ChangeItem = () => {
     }
 
     //const item = { name, price, amount, description, picture : pictureName, pictureFile : picture };
-    const item = { name, price, amount, description, picture: pictureName, sellerId: GetUser().id };
+    item = { name, price, amount, description, picture: pictureName, sellerId: GetUser().id };
     //console.log(item);
     try {
       const response = await UpdateItem(id, item);

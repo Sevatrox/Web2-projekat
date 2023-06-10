@@ -1,3 +1,11 @@
+export const itemModel = ({
+    name: '',
+    price: -1,
+    amount: -1,
+    description: '',
+    picture: '',
+    sellerId: -1,
+  });
 export const GetItem =  () =>
 {
     return JSON.parse(localStorage.getItem('item'));

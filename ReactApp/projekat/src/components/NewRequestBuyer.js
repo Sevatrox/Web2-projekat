@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { GetAllItems } from '../services/ItemService';
 import { GetUserById } from '../services/UserService';
+import { itemModel } from '../models/ItemModel';
+import { userModel } from '../models/UserModel';
 
 const NewRequestBuyer = () => {
   const [items, setItems] = useState([]);
@@ -16,12 +18,15 @@ const NewRequestBuyer = () => {
   const getData = async () => {
     try {
       const response = await GetAllItems();
-      const updatedItems = await getUsernames(response.data);
+      let itemResponse = itemModel;
+      itemResponse = response.data;
+
+      const updatedItems = await getUsernames(itemResponse);
       const filteredItems = updatedItems.filter(item => item.amount > 0);
 
       setItems(filteredItems);
-      setAmounts(Array(response.data.length).fill(1));
-      setErrors(Array(response.data.length).fill(''));
+      setAmounts(Array(itemResponse.length).fill(1));
+      setErrors(Array(itemResponse.length).fill(''));
     } catch (error) {
       console.error('Desila se greska:', error);
     }
@@ -40,7 +45,8 @@ const NewRequestBuyer = () => {
       } else {
         try {
           const response = await GetUserById(sellerId);
-          const seller = response.data;
+          let seller = userModel;
+          seller = response.data;
           sellerUsername = seller.username;
           sellers[sellerId] = sellerUsername;
         } catch (error) {

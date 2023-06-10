@@ -1,3 +1,21 @@
+export const userModel = ({
+    id: -1,
+    username: '',
+    password: '',
+    email: '',
+    name: '',
+    surname: '',
+    date: '',
+    address: '',
+    type: '',
+    picture: '',
+  });
+
+export const userLoginModel = ({
+    email: '',
+    password: '',
+  });
+
 export const GetToken =  () =>
 {
     return localStorage.getItem('token');

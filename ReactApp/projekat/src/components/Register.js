@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate  } from "react-router-dom";
 import { AddUser } from "../services/UserService";
+import { userModel } from "../models/UserModel";
 
 const Register = () => {
 
@@ -18,6 +19,8 @@ const Register = () => {
     const [pictureName, setPictureName] = useState('');
     const [picture, setPicture] = useState();
     const [errors, setErrors] = useState({});
+
+    let user = userModel;
 
     const history = useNavigate();
 
@@ -58,12 +61,13 @@ const Register = () => {
           return;
         }
 
-        //const account = { username, email, password, name, surname, date, address, type, picture : pictureName, pictureFile : picture };
-        const account = { username, email, password, name, surname, date, address, type, picture : pictureName };
-        console.log(account);
+        //user = { username, email, password, name, surname, date, address, type, picture : pictureName, pictureFile : picture };
+        user = { username, email, password, name, surname, date, address, type, picture : pictureName }
+
+        console.log(user);
         try{
-            const response = await AddUser(account);
-            console.log(response);
+            const response = await AddUser(user);
+            console.log(response.data);
             alert('Uspjesno ste se registrovali! Loginujte se za pristup sajtu.')
             history("/");      
         }

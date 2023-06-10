@@ -2,9 +2,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { GetUser } from "../models/UserModel";
 import { useEffect, useState } from "react";
 import { CreateOrder } from "../services/OrderService";
+import { itemModel } from "../models/ItemModel";
+import { orderCreateModel } from "../models/OrderModel";
 
 const MakeRequest = () => {
-
     const { items } = useParams();
     const [comment, setComment] = useState('');
     const [address, setAddress] = useState('');
@@ -12,7 +13,8 @@ const MakeRequest = () => {
     const [cijena, setCijena] = useState(0);
     const [cijenaDostave, setCijenaDostave] = useState(0);
 
-    const parsedItems = JSON.parse(decodeURIComponent(items));
+    let parsedItems = [itemModel];
+    parsedItems = JSON.parse(decodeURIComponent(items));
     const postarina = 10;
     const buyerId = GetUser().id;
 
@@ -49,15 +51,18 @@ const MakeRequest = () => {
 
             const sellerIds = Array.from(new Set(parsedItems.map((item) => item.prodavac)));
             const requestPromises = sellerIds.map(async (sellerId) => {
-                const sellerItems = parsedItems.filter((item) => item.prodavac === sellerId);
+                let sellerItems = itemModel;
+                sellerItems = parsedItems.filter((item) => item.prodavac === sellerId);
+
                 const ids = sellerItems.map((item) => item.id);
                 const amounts = sellerItems.map((item) => item.amount);
                 const price = postarina + sellerItems.reduce((sum, item) => sum + item.price * item.amount, 0);
                 const sellerIdNumber = sellerItems.map((item) => item.sellerId);
 
-                const request = { price, comment, address, sellerId : sellerIdNumber[0], buyerId, orderTime : currentTime, orderArriving : "", ids, amounts };
+                let order = orderCreateModel;
+                order = { price, comment, address, sellerId : sellerIdNumber[0], buyerId, orderTime : currentTime, orderArriving : "", ids, amounts };
 
-                const response = await CreateOrder(request);
+                const response = await CreateOrder(order);
                 console.log(response.data);
             });
 

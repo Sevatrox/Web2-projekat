@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { DeleteItem, GetItemsBySellerId } from '../services/ItemService';
 import { GetUser } from '../models/UserModel';
 import { useNavigate } from 'react-router-dom';
-import { SetItem } from '../models/ItemModel';
+import { SetItem, itemModel } from '../models/ItemModel';
 
 const Items = () => {
     const [items, setItems] = useState([]);
@@ -15,7 +15,10 @@ const Items = () => {
     const getItems = async () => {
       try {
         const response = await GetItemsBySellerId(GetUser().id);
-        const filteredItems = response.data.filter(item => item.amount > 0);
+        let itemsResponse = [itemModel];
+        itemsResponse = response.data;
+        
+        const filteredItems = itemsResponse.filter(item => item.amount > 0);
         setItems(filteredItems);
       } catch (error) {
         console.log(error);

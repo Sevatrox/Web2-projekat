@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { GetEmail, GetRole, GetToken, SetUser } from "../models/UserModel";
+import { GetEmail, GetRole, GetToken, SetUser, userModel } from "../models/UserModel";
 import { SetVerification } from '../models/VerificationModel';
 import { GetVerificationFromBackend } from '../services/VerificationService';
 import { GetUserFromBackend } from '../services/UserService';
@@ -23,16 +23,20 @@ const Navbar = () => {
     }, [role, isLoggedIn]);
 
     const getData = async () => {
+      let user = userModel;
       const response = await GetUserFromBackend();
-      const temp = response.data;
-      if (response.data.type === 1)
+      user = response.data;
+
+      const temp = user;
+      if (user.type === 1)
         temp.type = 'Kupac';
-      else if (response.data.type === 2) {
+      else if (user.type === 2) {
         temp.type = 'Prodavac'
       }
       else
         temp.type = 'Admin';
-      temp.password = (response.data.password).slice(0, 10).split('').map(() => '*').join('');
+
+      temp.password = (user.password).slice(0, 10).split('').map(() => '*').join('');
       SetUser(temp);
     }
 
