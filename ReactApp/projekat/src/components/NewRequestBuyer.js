@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { GetAllItems } from '../services/ItemService';
 import { GetUserById } from '../services/UserService';
-import { itemModel } from '../models/ItemModel';
+import { itemModel, SetBasket } from '../models/ItemModel';
 import { userModel } from '../models/UserModel';
 
 const NewRequestBuyer = () => {
@@ -89,10 +89,9 @@ const NewRequestBuyer = () => {
     const updatedItem = { ...item, amount };
     updatedItemsOrder.push(updatedItem);
     setItemsOrder(updatedItemsOrder);
-
+    SetBasket(updatedItemsOrder);
   };
 
-  //console.log(itemsOrder);
 
   return (
     <div className="new-request-buyer-container">

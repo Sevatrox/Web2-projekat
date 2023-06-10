@@ -151,6 +151,48 @@ namespace Projekat.Services
             return imageName;
         }
 
+        public string LoginGoogle(UserRegisterDto account)
+        {
+            User user;
+            try
+            {
+                user = _dataContext.Users.First(x => x.Email == account.Email);
 
+                List<Claim> claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Role, "kupac"));
+
+                SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
+                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                var tokeOptions = new JwtSecurityToken(
+                    issuer: "http://localhost:7194",
+                    claims: claims,
+                    expires: DateTime.Now.AddMinutes(20),
+                    signingCredentials: signinCredentials
+                );
+                string tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+                return tokenString;
+            }
+            catch(Exception ex)
+            {
+                User newUser = _mapper.Map<User>(account);
+                newUser.Type = UserType.BUYER;
+                _dataContext.Users.Add(newUser);
+                _dataContext.SaveChanges();
+
+                List<Claim> claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Role, "kupac"));
+
+                SymmetricSecurityKey secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
+                var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                var tokeOptions = new JwtSecurityToken(
+                    issuer: "http://localhost:7194",
+                    claims: claims,
+                    expires: DateTime.Now.AddMinutes(20),
+                    signingCredentials: signinCredentials
+                );
+                string tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+                return tokenString;
+            }
+        }
     }
 }

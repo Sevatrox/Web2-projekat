@@ -17,7 +17,7 @@ const Items = () => {
         const response = await GetItemsBySellerId(GetUser().id);
         let itemsResponse = [itemModel];
         itemsResponse = response.data;
-        
+
         const filteredItems = itemsResponse.filter(item => item.amount > 0);
         setItems(filteredItems);
       } catch (error) {
@@ -31,12 +31,6 @@ const Items = () => {
     };
     
     const handleDelete = async (itemId) => {
-        // Ako hoce da obrise, provjeri se prvo da li postoji artikal u ItemOrder,
-        // ako postoji samo mu se postavi amount na 0 i tada se ne prikazuje u tabeli, u suprotnom obrise se
-        /*if(itemAmount === postoji)
-            updateItem();
-        else{}*/
-
         try {
             const response = await DeleteItem(itemId);
             console.log(response);

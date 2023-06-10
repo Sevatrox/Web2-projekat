@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GetUser, userModel } from "../models/UserModel";
+import { userModel } from "../models/UserModel";
 import { GetAllOrders } from "../services/OrderService";
 import { orderModel } from "../models/OrderModel";
 import { itemModel } from "../models/ItemModel";
@@ -15,8 +15,6 @@ const AllRequests = () => {
 
     const getData = async () => {
         try {
-            let user = userModel;
-            user = GetUser();
             const response = await GetAllOrders();
             let ordersResponse = [orderModel];
             ordersResponse = response.data;
@@ -60,7 +58,6 @@ const AllRequests = () => {
                 const orderWithItems = { ...updatedOrder, items: updatedItems };
                 ordersWithItems.push(orderWithItems);
             }
-            console.log(ordersWithItems);
             setOrders(ordersWithItems);
         } catch (e) {
             alert("Desila se greska: " + e);

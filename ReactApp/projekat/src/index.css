@@ -111,7 +111,7 @@ cursor: pointer;
 .login a:hover {
   color: #00ffff;
 }
-.login button {
+.button-login {
   text-decoration: none;
   margin-top: 15px;
   background-color: #4caf50;
@@ -121,8 +121,12 @@ cursor: pointer;
   border-radius: 4px;
   cursor: pointer;
 }
-.login button:hover {
+.button-login:hover {
   color: #00ffff;
+}
+
+.google {
+  background-color: white;
 }
 
 .login .error{

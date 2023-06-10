@@ -39,6 +39,13 @@ namespace Projekat.Controllers
             return token == null ? BadRequest(token) : Ok(token);
         }
 
+        [HttpPost("loginGoogle")]
+        public IActionResult LoginGoogle([FromBody] UserRegisterDto userRegisterDto)
+        {
+            var token = _userService.LoginGoogle(userRegisterDto);
+            return token == null ? BadRequest(token) : Ok(token);
+        }
+
         [HttpGet("{email}")]
         [Authorize(Roles = "kupac,admin,prodavac")]
         public IActionResult GetUser(string email)

@@ -12,6 +12,7 @@ const Home = () => {
       localStorage.removeItem("user");
       localStorage.removeItem("verification")
       localStorage.removeItem('item');
+      localStorage.removeItem('basket');
       history("/");
       window.location.reload();
     };

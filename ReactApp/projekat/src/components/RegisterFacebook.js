@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const RegisterGmail = () => {
+const RegisterFacebook = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,7 +16,7 @@ const RegisterGmail = () => {
 
     return ( 
         <div className="register">
-            <h2>Registracija putem Gmail-a</h2>
+            <h2>Registracija putem Facebook-a</h2>
             <form onSubmit={handleSubmit}>
                 <label>Email: </label>
                 <input
@@ -43,4 +43,4 @@ const RegisterGmail = () => {
      );
 }
  
-export default RegisterGmail;
+export default RegisterFacebook;

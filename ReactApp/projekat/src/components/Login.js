@@ -1,17 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate  } from "react-router-dom";
-import { LoginUser } from "../services/UserService";
-import { SetEmail, SetRole, SetToken, userLoginModel } from "../models/UserModel";
-
+import { LoginUser, LoginGoogle } from "../services/UserService";
+import { SetEmail, SetRole, SetToken, userLoginModel, userModel } from "../models/UserModel";
 import jwt from 'jwt-decode';
+import jwtDecode from "jwt-decode";
 
 const Login = () => {
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
-
     const history = useNavigate();
+
+    useEffect(() => {
+      /* global google */
+      google.accounts.id.initialize({
+        client_id: process.env.REACT_APP_API_CLIENT_ID,
+        callback: handleCallbackResponse
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("signInDiv"),
+        { theme: "outline", size: "large"}
+      )
+    }, []);
+
+    function handleCallbackResponse(response){
+        console.log("Encoded JWT ID token: " + response.credential);
+        var userObject = jwtDecode(response.credential);
+
+        let user = userModel;
+        user.email = userObject.email;
+        user.name = userObject.given_name;
+        user.surname = userObject.family_name;
+
+        LoginWithGoogle(user);
+    }
+
+    const LoginWithGoogle = async (user) => {
+        const response = await LoginGoogle(user);
+        SetToken(response.data);
+        SetRole(jwt(response.data));
+        SetEmail(user.email);
+        history("/");     
+        window.location.reload();
+    }
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -29,7 +60,6 @@ const Login = () => {
             setErrors(validationErrors);
             return;
         }
-
 
         const account = userLoginModel;
         account.email = email;
@@ -74,9 +104,12 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 {errors.password && <p className="error">{errors.password}</p>}
+                <div id="signInDiv"></div>
+                <br />
                 <Link to="/registracija">Ako nemate profil, pritisnite ovaj link za registraciju.</Link>
-                <button>Log In</button>
+                <button className="button-login">Log In</button>
             </form>
+
         </div>
      );
 }

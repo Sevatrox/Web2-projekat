@@ -1,5 +1,5 @@
 export const userModel = ({
-    id: -1,
+    id: 0,
     username: '',
     password: '',
     email: '',
@@ -7,7 +7,7 @@ export const userModel = ({
     surname: '',
     date: '',
     address: '',
-    type: '',
+    type: -1,
     picture: '',
   });
 

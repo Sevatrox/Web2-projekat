@@ -12,7 +12,7 @@ import MyRequests from './components/MyRequests';
 import AllRequests from './components/AllRequests';
 import Register from './components/Register';
 import Login from './components/Login';
-import RegisterGmail from './components/RegisterGmail';
+import RegisterFacebook from './components/RegisterFacebook';
 import ProfileChange from './components/ProfileChange';
 import Items from './components/Items';
 import AddItem from './components/AddItem';
@@ -29,7 +29,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/registracija" element={<Register />} />
-            <Route path="/registracijaGmail" element={<RegisterGmail />} />
+            <Route path="/registracijaFacebook" element={<RegisterFacebook />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profil" element={<Profile />} />
             <Route path="/izmjenaProfila" element={<ProfileChange />} />

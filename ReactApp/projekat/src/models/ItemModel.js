@@ -15,3 +15,13 @@ export const SetItem =  (item) =>
 {
     localStorage.setItem('item', JSON.stringify(item));
 }
+
+export const SetBasket =  (basket) =>
+{
+    localStorage.setItem('basket', JSON.stringify(basket));
+}
+
+export const GetBasket =  () =>
+{
+    return JSON.parse(localStorage.getItem('basket'));
+}

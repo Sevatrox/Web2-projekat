@@ -61,7 +61,6 @@ const ChangeItem = () => {
 
     //const item = { name, price, amount, description, picture : pictureName, pictureFile : picture };
     item = { name, price, amount, description, picture: pictureName, sellerId: GetUser().id };
-    //console.log(item);
     try {
       const response = await UpdateItem(id, item);
       console.log(response.data);

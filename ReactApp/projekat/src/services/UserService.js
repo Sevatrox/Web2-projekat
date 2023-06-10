@@ -18,6 +18,11 @@ export const LoginUser = async (account) =>
     return await axios.post(process.env.REACT_APP_API_URL + '/api/users/login', account);
 }
 
+export const LoginGoogle = async (account) =>
+{
+    return await axios.post(process.env.REACT_APP_API_URL + '/api/users/loginGoogle', account);
+}
+
 export const GetUserFromBackend = async () =>
 {   
     const email = GetEmail();

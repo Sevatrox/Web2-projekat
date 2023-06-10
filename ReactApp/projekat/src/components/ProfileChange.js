@@ -4,7 +4,6 @@ import { UpdateUser } from "../services/UserService";
 import { GetUser, SetUser, userModel } from "../models/UserModel";
 
 const ProfileChange = () => {
-    //const { id } = useParams();
     const [id, setId] = useState();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');

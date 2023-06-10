@@ -63,11 +63,10 @@ const MakeRequest = () => {
                 order = { price, comment, address, sellerId : sellerIdNumber[0], buyerId, orderTime : currentTime, orderArriving : "", ids, amounts };
 
                 const response = await CreateOrder(order);
-                console.log(response.data);
             });
 
             await Promise.all(requestPromises);
-
+            localStorage.removeItem('basket');
             alert("Uspjesno ste napravili narudzbinu!");
             history("/");
         } catch (e) {
