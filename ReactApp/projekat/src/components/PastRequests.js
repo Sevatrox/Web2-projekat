@@ -25,6 +25,7 @@ const PastRequests = () => {
             for (const order of response.data) {
                 const itemsResponse = await GetItemsByOrderId(order.id);
                 let itemsModel = [itemModel];
+                itemsModel = itemsResponse.data;
 
                 const updatedItems = [];
                 for (const item of itemsModel) {
