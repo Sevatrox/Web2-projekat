@@ -11,7 +11,7 @@ using Projekat.Data;
 namespace Projekat.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230609193008_CreateInitial")]
+    [Migration("20230610033045_CreateInitial")]
     partial class CreateInitial
     {
         /// <inheritdoc />
@@ -82,6 +82,9 @@ namespace Projekat.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
                     b.Property<long>("ItemId")
                         .HasColumnType("bigint");

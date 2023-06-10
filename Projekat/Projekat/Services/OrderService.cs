@@ -37,16 +37,18 @@ namespace Projekat.Services
             foreach (var itemId in orderDto.Ids)
             {
                 ItemDto item= _itemService.UpdateItemAfterOrder(itemId, orderDto.Amounts[counter]);
-                counter++;
 
                 ItemsInsideOrderDto itemOrderDto = new ItemsInsideOrderDto();
                 itemOrderDto.ItemId = itemId;
                 itemOrderDto.OrderId = order.Id;
+                itemOrderDto.Amount = orderDto.Amounts[counter];
 
                 ItemsInsideOrder itemOrder = _mapper.Map<ItemsInsideOrder>(itemOrderDto);
 
                 _dataContext.ItemsInsideOrders.Add(itemOrder); 
                 _dataContext.SaveChanges();
+
+                counter++;
             }
 
             return _mapper.Map<OrderDto>(order);
@@ -88,6 +90,25 @@ namespace Projekat.Services
             }
 
             return orderCancelCheckDtos;
+        }
+
+        public void DeleteOrder(long id)
+        {
+            List<ItemsInsideOrder> itemsInsideOrder = _dataContext.ItemsInsideOrders.ToList().FindAll(x => x.OrderId == id);
+            foreach (var item in itemsInsideOrder)
+            {
+                Item itemDB = _dataContext.Items.Find(item.ItemId);
+                itemDB.Amount += item.Amount;
+                _dataContext.SaveChanges();
+
+                _dataContext.ItemsInsideOrders.Remove(item);
+                _dataContext.SaveChanges();
+            }
+
+            Order order = _dataContext.Orders.Find(id);
+
+            _dataContext.Orders.Remove(order);
+            _dataContext.SaveChanges();
         }
 
         public static Tuple<int, int> CalculateTime(string orderTime, string orderArriving, int otkaz)

@@ -11,3 +11,8 @@ export const GetOrdersByBuyerId = async (buyerId) =>
 {   
     return await axios.get(process.env.REACT_APP_API_URL + '/api/orders/' + buyerId, config);
 }
+
+export const DeleteOrder = async (id) =>
+{   
+    return await axios.delete(process.env.REACT_APP_API_URL + '/api/orders/' + id, config);
+}

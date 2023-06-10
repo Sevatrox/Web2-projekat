@@ -80,6 +80,9 @@ namespace Projekat.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
                     b.Property<long>("ItemId")
                         .HasColumnType("bigint");
 

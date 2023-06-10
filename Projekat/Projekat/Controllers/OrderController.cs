@@ -32,5 +32,13 @@ namespace Projekat.Controllers
         {
             return Ok(_orderService.GetOrdersByBuyerId(buyerId));
         }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "kupac")]
+        public IActionResult DeleteOrder(long id)
+        {
+            _orderService.DeleteOrder(id);
+            return Ok();
+        }
     }
 }

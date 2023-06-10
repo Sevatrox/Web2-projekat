@@ -7,5 +7,6 @@ namespace Projekat.Interfaces
     {
         OrderDto CreateOrder(OrderDto orderDto);
         List<OrderCancelCheckDto> GetOrdersByBuyerId(long buyerId);
+        void DeleteOrder(long id);
     }
 }

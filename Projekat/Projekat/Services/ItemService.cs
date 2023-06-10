@@ -84,7 +84,9 @@ namespace Projekat.Services
             List<ItemDto> items = new List<ItemDto>();
             foreach (var item in itemsInsideOrderDto)
             {
-                items.Add(GetItemById(item.ItemId));
+                ItemDto itemDB = GetItemById(item.ItemId);
+                itemDB.Amount = item.Amount;
+                items.Add(itemDB);
             }
             return items;
         }

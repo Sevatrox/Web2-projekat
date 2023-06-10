@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { GetUser } from "../models/UserModel";
-import { GetOrdersByBuyerId } from "../services/OrderService";
+import { DeleteOrder, GetOrdersByBuyerId } from "../services/OrderService";
 import { GetItemsByOrderId } from "../services/ItemService";
 import { GetUserById } from "../services/UserService";
+import { useNavigate } from "react-router-dom";
 
 const PastRequests = () => {
     const [orders, setOrders] = useState([]);
+    const history = useNavigate();
 
     useEffect(() => {
         getData();
@@ -18,7 +20,6 @@ const PastRequests = () => {
             const ordersWithItems = [];
             for (const order of response.data) {
                 const itemsResponse = await GetItemsByOrderId(order.id);
-                console.log(itemsResponse.data);
 
                 const updatedItems = [];
                 for (const item of itemsResponse.data) {
@@ -52,8 +53,15 @@ const PastRequests = () => {
         return remainingMinutes;
     };
 
-    const handleOtkazi = () => {
-
+    const handleOtkazi = async (orderId) => {
+        try{
+            const response = await DeleteOrder(orderId);
+            alert('Uspjesno ste obrisali porudzbinu!');
+            history('/prethodnePorudzbine');
+        }
+        catch(e){
+            alert('Desila se greska: ', e);
+        }
     };
 
     return (
@@ -88,7 +96,7 @@ const PastRequests = () => {
                                     {(order.status === 0 && <td><label>{calculateRemainingMinutes(order)} minuta</label></td>)}
                                     <td>
                                         {order.cancel === 1 ? (
-                                            <button className="past-requests-button" onClick={() => handleOtkazi()}>
+                                            <button className="past-requests-button" onClick={() => handleOtkazi(order.id)}>
                                                 Otkazi
                                             </button>
                                         ) : (
@@ -103,6 +111,7 @@ const PastRequests = () => {
                                 <tr>
                                     <th>Naziv</th>
                                     <th>Cijena</th>
+                                    <th>Kolicina</th>
                                     <th>Opis</th>
                                     <th>Slika</th>
                                     <th>Prodavac</th>
@@ -113,6 +122,7 @@ const PastRequests = () => {
                                     <tr key={item.id}>
                                         <td>{item.name}</td>
                                         <td>{item.price}</td>
+                                        <td>{item.amount}</td>
                                         <td>{item.description}</td>
                                         <td>
                                             <img src={item.picture} alt={item.name} />
