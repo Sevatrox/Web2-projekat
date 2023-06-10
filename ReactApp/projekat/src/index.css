@@ -556,3 +556,62 @@ cursor: pointer;
 .make-request-container .error, .cijena {
   color: red;
 }
+
+.past-requests-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.past-requests-content {
+  text-align: center;
+}
+
+.past-requests-title {
+  font-size: 25px;
+  color: red;
+}
+
+.past-requests-table {
+  margin-top: 15px;
+  margin-left: -75px;
+  border-collapse: collapse;
+  width: 140%; 
+}
+
+.past-requests-table th,
+.past-requests-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 18px; 
+}
+
+.past-requests-button {
+  text-decoration: none;
+  margin-top: 0px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.past-requests-button:hover {
+  color: #00ffff;
+}
+
+.past-requests-container input, .past-requests-container textarea{
+  padding: 6px 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  display: block;
+}
+
+.past-requests-container .error {
+  color: red;
+}

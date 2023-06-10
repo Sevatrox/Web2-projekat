@@ -72,5 +72,21 @@ namespace Projekat.Services
         {
             return _mapper.Map<List<ItemDto>>(_dataContext.Items.ToList());
         }
+
+        public ItemDto GetItemById(long id)
+        {
+            return _mapper.Map<ItemDto>(_dataContext.Items.First(x => x.Id == id));
+        }
+
+        public List<ItemDto> GetItemsByOrderId(long orderId)
+        {
+            List<ItemsInsideOrderDto> itemsInsideOrderDto = _mapper.Map<List<ItemsInsideOrderDto>>(_dataContext.ItemsInsideOrders.ToList().FindAll(x => x.OrderId == orderId));
+            List<ItemDto> items = new List<ItemDto>();
+            foreach (var item in itemsInsideOrderDto)
+            {
+                items.Add(GetItemById(item.ItemId));
+            }
+            return items;
+        }
     }
 }

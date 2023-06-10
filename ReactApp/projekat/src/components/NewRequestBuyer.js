@@ -17,8 +17,9 @@ const NewRequestBuyer = () => {
     try {
       const response = await GetAllItems();
       const updatedItems = await getUsernames(response.data);
+      const filteredItems = updatedItems.filter(item => item.amount > 0);
 
-      setItems(updatedItems);
+      setItems(filteredItems);
       setAmounts(Array(response.data.length).fill(1));
       setErrors(Array(response.data.length).fill(''));
     } catch (error) {
@@ -43,7 +44,7 @@ const NewRequestBuyer = () => {
           sellerUsername = seller.username;
           sellers[sellerId] = sellerUsername;
         } catch (error) {
-          console.error(`Error fetching seller data for item ID ${item.id}:`, error);
+          console.error('Desila se greska:', error);
           continue;
         }
       }
@@ -82,9 +83,10 @@ const NewRequestBuyer = () => {
     const updatedItem = { ...item, amount };
     updatedItemsOrder.push(updatedItem);
     setItemsOrder(updatedItemsOrder);
-    console.log(items);
-    console.log(itemsOrder);
+
   };
+
+  //console.log(itemsOrder);
 
   return (
     <div className="new-request-buyer-container">

@@ -25,3 +25,8 @@ export const GetAllItems = async () =>
 {   
     return await axios.get(process.env.REACT_APP_API_URL + '/api/items/all', config);
 }
+
+export const GetItemsByOrderId = async (orderId) =>
+{   
+    return await axios.get(process.env.REACT_APP_API_URL + '/api/items/byOrder/' + orderId, config);
+}

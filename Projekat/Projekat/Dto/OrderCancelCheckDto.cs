@@ -2,7 +2,7 @@
 
 namespace Projekat.Dto
 {
-    public class OrderDto
+    public class OrderCancelCheckDto
     {
         public long Id { get; set; }
         public double Price { get; set; }
@@ -13,7 +13,6 @@ namespace Projekat.Dto
         public long BuyerId { get; set; }
         public string OrderTime { get; set; }
         public string OrderArriving { get; set; }
-        public List<long> Ids { get; set; }
-        public List<int> Amounts { get; set; }
+        public int Cancel { get; set; }
     }
 }

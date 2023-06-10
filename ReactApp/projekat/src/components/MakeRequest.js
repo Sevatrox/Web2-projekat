@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { GetUser } from "../models/UserModel";
 import { useEffect, useState } from "react";
+import { CreateOrder } from "../services/OrderService";
 
 const MakeRequest = () => {
 
@@ -42,16 +43,22 @@ const MakeRequest = () => {
           setErrors(validationErrors);
           return;
         }
-
+        
         try {
+            const currentTime = new Date().toLocaleString();
+
             const sellerIds = Array.from(new Set(parsedItems.map((item) => item.prodavac)));
             const requestPromises = sellerIds.map(async (sellerId) => {
                 const sellerItems = parsedItems.filter((item) => item.prodavac === sellerId);
-                const listIds = sellerItems.map((item) => item.id);
-                const price = cijenaDostave + sellerItems.reduce((sum, item) => sum + item.price * item.amount, 0);
-                const request = { price, comment, address, sellerId, buyerId, listIds };
+                const ids = sellerItems.map((item) => item.id);
+                const amounts = sellerItems.map((item) => item.amount);
+                const price = postarina + sellerItems.reduce((sum, item) => sum + item.price * item.amount, 0);
+                const sellerIdNumber = sellerItems.map((item) => item.sellerId);
 
-                //const response = await (JSON.stringify(request));
+                const request = { price, comment, address, sellerId : sellerIdNumber[0], buyerId, orderTime : currentTime, orderArriving : "", ids, amounts };
+
+                const response = await CreateOrder(request);
+                console.log(response.data);
             });
 
             await Promise.all(requestPromises);
@@ -62,6 +69,8 @@ const MakeRequest = () => {
             alert("Desila se greska prilikom pravljenja narudzbine!");
         }
     }
+
+
 
     return ( 
         <div className="make-request-container">

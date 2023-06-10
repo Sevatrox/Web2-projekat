@@ -11,5 +11,6 @@ namespace Projekat.Interfaces
         ItemDto UpdateItem(long id, ItemDto itemDto);
         List<ItemDto> GetAll();
         ItemDto UpdateItemAfterOrder(long id, int amount);
+        List<ItemDto> GetItemsByOrderId(long orderId);
     }
 }

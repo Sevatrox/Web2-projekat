@@ -6,5 +6,6 @@ namespace Projekat.Interfaces
     public interface IOrderService
     {
         OrderDto CreateOrder(OrderDto orderDto);
+        List<OrderCancelCheckDto> GetOrdersByBuyerId(long buyerId);
     }
 }

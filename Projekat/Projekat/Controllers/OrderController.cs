@@ -25,5 +25,12 @@ namespace Projekat.Controllers
         {
             return Ok(_orderService.CreateOrder(orderDto));
         }
+
+        [HttpGet("{buyerId}")]
+        [Authorize(Roles = "kupac")]
+        public IActionResult GetOrdersByBuyerId(long buyerId)
+        {
+            return Ok(_orderService.GetOrdersByBuyerId(buyerId));
+        }
     }
 }

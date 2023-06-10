@@ -38,7 +38,7 @@ function App() {
             <Route path="/izmjenaArtikla" element={<ChangeItem />} />
             <Route path="/porudzbinaKupac" element={<NewRequestBuyer />} />
             <Route path="/napraviPorudzbinu/:items" element={<MakeRequest />} />
-            <Route path="/napraviPorudzbinu/" element={<EmptyRequest />} />
+            <Route path="/napraviPorudzbinu/[]" element={<EmptyRequest />} />
             <Route path="/prethodnePorudzbine" element={<PastRequests />} />
             <Route path="/verifikacija" element={<Verification />} />
             <Route path="/novePorudzbineProdavac" element={<NewRequestsSeller />} />

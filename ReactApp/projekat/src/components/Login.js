@@ -32,12 +32,10 @@ const Login = () => {
 
 
         const account = { email, password };
-        console.log(account);
 
         try{
             const response = await LoginUser(account);
             SetToken(response.data);
-            //console.log(response.data);
             SetRole(jwt(response.data));
             SetEmail(account.email);
             history("/");     

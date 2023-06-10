@@ -13,6 +13,7 @@ namespace Projekat.Mapping
             CreateMap<Item, ItemDto>().ReverseMap();
             CreateMap<Verification, VerificationDto>().ReverseMap();
             CreateMap<Order, OrderDto>().ReverseMap();
+            CreateMap<Order, OrderCancelCheckDto>().ReverseMap();
             CreateMap<ItemsInsideOrder, ItemsInsideOrderDto>().ReverseMap();
         }
     }

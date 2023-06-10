@@ -33,6 +33,13 @@ namespace Projekat.Controllers
             return Ok(_itemService.GetItemsBySellerId(sellerId));
         }
 
+        [HttpGet("byOrder/{orderId}")]
+        [Authorize(Roles = "kupac,prodavac")]
+        public IActionResult GetItemsByOrderId(long orderId)
+        {
+            return Ok(_itemService.GetItemsByOrderId(orderId));
+        }
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "prodavac")]
         public IActionResult DeleteItem(long id)
