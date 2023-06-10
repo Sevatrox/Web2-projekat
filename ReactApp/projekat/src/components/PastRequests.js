@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { GetUser } from "../models/UserModel";
-import { DeleteOrder, GetOrdersByBuyerId } from "../services/OrderService";
+import { DeleteOrder, GetOrdersByBuyerId, calculateRemainingMinutes } from "../services/OrderService";
 import { GetItemsByOrderId } from "../services/ItemService";
 import { GetUserById } from "../services/UserService";
-import { useNavigate } from "react-router-dom";
 
 const PastRequests = () => {
     const [orders, setOrders] = useState([]);
-    const history = useNavigate();
 
     useEffect(() => {
         getData();
@@ -45,19 +43,12 @@ const PastRequests = () => {
         }
     };
 
-    const calculateRemainingMinutes = (order) => {
-        const orderArrivingTime = new Date(order.orderArriving);
-        const currentTime = new Date();
-        const remainingTime = orderArrivingTime - currentTime;
-        const remainingMinutes = Math.floor(remainingTime / 60000);
-        return remainingMinutes;
-    };
-
-    const handleOtkazi = async (orderId) => {
+    const handleOtkazi = async (order) => {
         try{
-            const response = await DeleteOrder(orderId);
-            alert('Uspjesno ste obrisali porudzbinu!');
-            history('/prethodnePorudzbine');
+            const response = await DeleteOrder(order.id, order);
+            console.log(response.data);
+            alert('Uspjesno ste otkazali porudzbinu!');
+            window.location.reload();
         }
         catch(e){
             alert('Desila se greska: ', e);
@@ -70,7 +61,7 @@ const PastRequests = () => {
                 <h2 className="past-requests-title">Porudzbine</h2>
                 {orders.map((order) => (
                     <div key={order.id}>
-                        <table className="past-requests-table">
+                        <table className="past-requests-table-order">
                             <thead>
                                 <tr>
                                     <th>Cijena</th>
@@ -78,7 +69,7 @@ const PastRequests = () => {
                                     <th>Adresa</th>
                                     <th>Status</th>
                                     <th>Vrijeme narudzbe</th>
-                                    <th>Vrijeme kada stize narudzba</th>
+                                    <th>Vrijeme narudzbe</th>
                                     <th>Vrijeme dostave</th>
                                     <th>Otkazivanje narudzbe</th>
                                 </tr>
@@ -92,11 +83,11 @@ const PastRequests = () => {
                                     {(order.status === 1 && <td><label>Dostavljeno</label></td>)}
                                     <td>{order.orderTime}</td>
                                     <td>{order.orderArriving}</td>
-                                    {(order.status === 1 && <td><label>0</label></td>)}
+                                    {(order.status === 1 && <td><label>Dostavljeno</label></td>)}
                                     {(order.status === 0 && <td><label>{calculateRemainingMinutes(order)} minuta</label></td>)}
                                     <td>
                                         {order.cancel === 1 ? (
-                                            <button className="past-requests-button" onClick={() => handleOtkazi(order.id)}>
+                                            <button className="past-requests-button" onClick={() => handleOtkazi(order)}>
                                                 Otkazi
                                             </button>
                                         ) : (
@@ -106,7 +97,7 @@ const PastRequests = () => {
                                 </tr>
                             </tbody>
                         </table>
-                        <table className="items-table">
+                        <table className="past-requests-table">
                             <thead>
                                 <tr>
                                     <th>Naziv</th>

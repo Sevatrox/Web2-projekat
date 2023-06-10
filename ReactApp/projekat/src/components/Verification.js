@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GetAllVerifications, UpdateVerification } from '../services/VerificationService';
-import { GetUsersFromBackendByType } from '../services/UserService';
+import { GetAllUsers } from '../services/UserService';
 import emailjs from '@emailjs/browser';
 
 const Verification = () => {
@@ -37,7 +37,7 @@ const Verification = () => {
   }
 
   const getSellers = async () => {
-    const response = await GetUsersFromBackendByType(2);
+    const response = await GetAllUsers();
     const temp = response.data.map(user => ({
       ...user,
       password: user.password.slice(0, 10).split('').map(() => '*').join('')
@@ -88,7 +88,7 @@ const Verification = () => {
   return (
     <div className="verification-container">
       <div className="verification-content">
-        <h2 className="verification-title">Verifikacija Prodavaca</h2>
+        <h2 className="verification-title">Korisnici</h2>
         <table className="verification-table">
           <thead>
             <tr>

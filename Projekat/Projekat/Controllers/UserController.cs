@@ -46,15 +46,15 @@ namespace Projekat.Controllers
             return Ok(_userService.GetByEmail(email));
         }
 
-        [HttpGet("type/{type}")]
+        [HttpGet("all")]
         [Authorize(Roles = "admin")]
-        public IActionResult GetUserByType(int type)
+        public IActionResult GetAll()
         {
-            return Ok(_userService.GetByType(type));
+            return Ok(_userService.GetAll());
         }
 
         [HttpGet("id/{id}")]
-        [Authorize(Roles = "kupac")]
+        [Authorize(Roles = "kupac,prodavac")]
         public IActionResult GetUserById(long id)
         {
             return Ok(_userService.GetUserById(id));

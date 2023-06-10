@@ -26,14 +26,28 @@ namespace Projekat.Controllers
             return Ok(_orderService.CreateOrder(orderDto));
         }
 
-        [HttpGet("{buyerId}")]
+        [HttpGet("buyer/{buyerId}")]
         [Authorize(Roles = "kupac")]
         public IActionResult GetOrdersByBuyerId(long buyerId)
         {
             return Ok(_orderService.GetOrdersByBuyerId(buyerId));
         }
 
-        [HttpDelete("{id}")]
+        [HttpGet("newOrders/{sellerId}")]
+        [Authorize(Roles = "prodavac")]
+        public IActionResult GetNewOrdersBySellerId(long sellerId)
+        {
+            return Ok(_orderService.GetNewOrdersBySellerId(sellerId));
+        }
+
+        [HttpGet("pastOrders/{sellerId}")]
+        [Authorize(Roles = "prodavac")]
+        public IActionResult GetPastOrdersBySellerId(long sellerId)
+        {
+            return Ok(_orderService.GetPastOrdersBySellerId(sellerId));
+        }
+
+        [HttpPut("{id}")]
         [Authorize(Roles = "kupac")]
         public IActionResult DeleteOrder(long id)
         {

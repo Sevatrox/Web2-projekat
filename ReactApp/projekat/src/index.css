@@ -573,11 +573,29 @@ cursor: pointer;
   color: red;
 }
 
+.past-requests-table-order {
+  margin-top: 15px;
+  border-collapse: collapse;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.past-requests-table-order th,
+.past-requests-table-order td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 18px; 
+}
+
 .past-requests-table {
   margin-top: 15px;
-  margin-left: -75px;
   border-collapse: collapse;
-  width: 140%; 
+  width: 100%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .past-requests-table th,
@@ -604,7 +622,8 @@ cursor: pointer;
   color: #00ffff;
 }
 
-.past-requests-container input, .past-requests-container textarea{
+.past-requests-container input,
+.past-requests-container textarea {
   padding: 6px 10px;
   margin: 10px 0;
   border: 1px solid #ddd;

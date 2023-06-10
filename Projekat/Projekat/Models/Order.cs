@@ -2,7 +2,7 @@
 {
     public enum OrderStatus
     {
-        IN_PROCESS = 0, DONE = 1
+        IN_PROCESS = 0, DONE = 1, CANCELED = 2
     }
     public class Order
     {

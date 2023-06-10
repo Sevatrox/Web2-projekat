@@ -56,7 +56,7 @@ namespace Projekat.Services
 
         public List<OrderCancelCheckDto> GetOrdersByBuyerId(long buyerId)
         {
-            List<Order> orders = _dataContext.Orders.ToList().FindAll(x => x.BuyerId == buyerId);
+            List<Order> orders = _dataContext.Orders.ToList().FindAll(x => x.BuyerId == buyerId && x.Status != OrderStatus.CANCELED);
             List<int> otkazi = new List<int>();
             int otkaz = 0;
             foreach (var order in orders)
@@ -74,8 +74,7 @@ namespace Projekat.Services
                     if(rezultat.Item2 == 1)
                     {
                         order.Status = OrderStatus.DONE;
-                        order.OrderArriving = "0";
-                        _dataContext.SaveChanges(); ;
+                        _dataContext.SaveChanges();
                     }
                 }
                 else
@@ -92,7 +91,38 @@ namespace Projekat.Services
             return orderCancelCheckDtos;
         }
 
-        public void DeleteOrder(long id)
+        public List<OrderDto> GetNewOrdersBySellerId(long sellerId)
+        {
+            List<Order> orders = _dataContext.Orders.ToList().FindAll(x => x.SellerId == sellerId && x.Status != OrderStatus.CANCELED);
+            List<OrderDto> orderDtos = new List<OrderDto>();
+
+            foreach (var order in orders)
+            {
+                if (order.Status == OrderStatus.IN_PROCESS)
+                {
+                    int temp = -1;
+                    Tuple<int, int> rezultat = CalculateTime(order.OrderTime, order.OrderArriving, temp);
+
+                    if (rezultat.Item2 == 1)
+                    {
+                        order.Status = OrderStatus.DONE;
+                        _dataContext.SaveChanges();
+                    }
+                    else
+                        orderDtos.Add(_mapper.Map<OrderDto>(order));
+                }
+            }
+
+            return orderDtos;
+        }
+
+        public List<OrderDto> GetPastOrdersBySellerId(long sellerId)
+        {
+            List<Order> orders = _dataContext.Orders.ToList().FindAll(x => x.SellerId == sellerId && x.Status == OrderStatus.DONE);
+            return _mapper.Map<List<OrderDto>>(orders);
+        }
+
+        public OrderDto DeleteOrder(long id)
         {
             List<ItemsInsideOrder> itemsInsideOrder = _dataContext.ItemsInsideOrders.ToList().FindAll(x => x.OrderId == id);
             foreach (var item in itemsInsideOrder)
@@ -100,15 +130,13 @@ namespace Projekat.Services
                 Item itemDB = _dataContext.Items.Find(item.ItemId);
                 itemDB.Amount += item.Amount;
                 _dataContext.SaveChanges();
-
-                _dataContext.ItemsInsideOrders.Remove(item);
-                _dataContext.SaveChanges();
             }
 
             Order order = _dataContext.Orders.Find(id);
-
-            _dataContext.Orders.Remove(order);
+            order.Status = OrderStatus.CANCELED;
             _dataContext.SaveChanges();
+
+            return _mapper.Map<OrderDto>(order);
         }
 
         public static Tuple<int, int> CalculateTime(string orderTime, string orderArriving, int otkaz)

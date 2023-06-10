@@ -65,7 +65,7 @@ const Navbar = () => {
           {isLoggedIn && <Link to="/profil">Profil</Link>}
           {isLoggedIn && role === "kupac" && <Link to="/porudzbinaKupac">Nova porudzbina</Link>}
           {isLoggedIn && role === "kupac" && <Link to="/prethodnePorudzbine">Prethodne porudzbine</Link>}
-          {isLoggedIn && role === "admin" && <Link to="/verifikacija">Verifikacija</Link>}
+          {isLoggedIn && role === "admin" && <Link to="/verifikacija">Korisnici</Link>}
           {isLoggedIn && role === "prodavac" && isVerified && <Link to="/artikli">Artikli</Link>}
           {isLoggedIn && role === "prodavac" && isVerified && <Link to="/noviArtikal">Dodaj artikal</Link>}
           {isLoggedIn && role === "prodavac" && isVerified && <Link to="/novePorudzbineProdavac">Nove porudzbine</Link>}
