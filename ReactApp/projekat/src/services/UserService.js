@@ -1,5 +1,6 @@
 import axios from "axios";
-import { GetEmail, GetToken } from "../models/UserModel";
+import { GetEmail, GetRole, GetToken } from "../models/UserModel";
+import { GetVerification } from "../models/VerificationModel";
 
 export const config =
 {
@@ -29,6 +30,13 @@ export const GetUserFromBackend = async () =>
     return await axios.get(process.env.REACT_APP_API_URL + '/api/users/' + email, config);
 }
 
+export const GetUserAfterLogin = async (token) =>
+{   
+    const email = GetEmail();
+    const firstConfig = {  headers: {"Authorization" : `Bearer ${token}`} };
+    return await axios.get(process.env.REACT_APP_API_URL + '/api/users/' + email, firstConfig);
+}
+
 export const GetAllUsers = async () =>
 {   
     return await axios.get(process.env.REACT_APP_API_URL + '/api/users/all', config);
@@ -42,4 +50,20 @@ export const UpdateUser = async (id, account) =>
 export const GetUserById = async (id) =>
 {   
     return await axios.get(process.env.REACT_APP_API_URL + '/api/users/id/' + id, config);
+}
+
+
+export const AuthUser = () => 
+{
+    const token = GetToken();
+    if(token === null)
+        return null;
+    else
+    {
+        const role = GetRole();
+        console.log(role);
+        if(role === "prodavac")
+            return GetVerification();
+        return role;
+    }
 }

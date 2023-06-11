@@ -1,9 +1,10 @@
 import { config } from "./UserService";
 import axios from "axios";
 
-export const GetVerificationFromBackend = async (userId) =>
+export const GetVerificationFromBackend = async (userId, token) =>
 {   
-    return await axios.get(process.env.REACT_APP_API_URL + '/api/verifications/' + userId, config);
+    const firstConfig = {  headers: {"Authorization" : `Bearer ${token}`} };
+    return await axios.get(process.env.REACT_APP_API_URL + '/api/verifications/' + userId, firstConfig);
 }
 
 export const GetAllVerifications = async () =>

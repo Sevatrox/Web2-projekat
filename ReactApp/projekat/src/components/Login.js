@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate  } from "react-router-dom";
-import { LoginUser, LoginGoogle } from "../services/UserService";
-import { SetEmail, SetRole, SetToken, userLoginModel, userModel } from "../models/UserModel";
+import { LoginUser, LoginGoogle, GetUserAfterLogin } from "../services/UserService";
+import { GetRole, SetEmail, SetRole, SetToken, userLoginModel, userModel } from "../models/UserModel";
 import jwt from 'jwt-decode';
 import jwtDecode from "jwt-decode";
+import { SetVerification } from "../models/VerificationModel";
+import { GetVerificationFromBackend } from "../services/VerificationService";
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -70,14 +72,35 @@ const Login = () => {
             SetToken(response.data);
             SetRole(jwt(response.data));
             SetEmail(account.email);
+
+            if(GetRole() === "prodavac")
+                await CheckVerification(response.data);
+                
             history("/");     
-            window.location.reload(); 
+            window.location.reload()
         }
         catch(e){
             alert('Ne postoji account sa tim email i lozinkom! Pokusajte ponovo.');
             history("/login");
         }
     }
+
+    const CheckVerification = async(token) => {
+        const responseUser = await GetUserAfterLogin(token);
+        const response = await GetVerificationFromBackend(responseUser.data.id, token);
+        if(response.data.status === 0)
+        {
+          SetVerification('In process');
+        }
+        else if(response.data.status === 1)
+        {
+          SetVerification('Accepted');
+        }
+        else
+        {
+          SetVerification('Denied');
+        }
+      }
 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

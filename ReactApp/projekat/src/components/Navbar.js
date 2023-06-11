@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { GetEmail, GetRole, GetToken, SetUser, userModel } from "../models/UserModel";
-import { SetVerification } from '../models/VerificationModel';
-import { GetVerificationFromBackend } from '../services/VerificationService';
+import { GetRole, GetToken, SetUser, userModel } from "../models/UserModel";
+import { GetVerification } from '../models/VerificationModel';
 import { GetUserFromBackend } from '../services/UserService';
 
 const Navbar = () => {
@@ -18,7 +17,12 @@ const Navbar = () => {
       setRole(GetRole());
       if(role === "prodavac")
       {
-        CheckVerification();
+        if(GetVerification() === 'Accepted')
+        {
+          setIsVerified(true);
+        }
+        else
+          setIsVerified(false);
       }
     }, [role, isLoggedIn]);
 
@@ -38,27 +42,6 @@ const Navbar = () => {
 
       temp.password = (user.password).slice(0, 10).split('').map(() => '*').join('');
       SetUser(temp);
-    }
-
-    const CheckVerification = async(userId) => {
-      const responseUser = await GetUserFromBackend(GetEmail());
-      const response = await GetVerificationFromBackend(responseUser.data.id);
-      if(response.data.status === 0)
-      {
-        SetVerification('In process');
-        setIsVerified(false);
-      }
-      else if(response.data.status === 1)
-      {
-        SetVerification('Accepted');
-        setIsVerified(true);
-      }
-      else
-      {
-        SetVerification('Denied');
-        setIsVerified(false);
-
-      }
     }
 
     return (
