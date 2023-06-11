@@ -22,7 +22,7 @@ const PastRequests = () => {
             ordersResponse = response.data;
 
             const ordersWithItems = [];
-            for (const order of response.data) {
+            for (const order of ordersResponse) {
                 const itemsResponse = await GetItemsByOrderId(order.id);
                 let itemsModel = [itemModel];
                 itemsModel = itemsResponse.data;
@@ -67,7 +67,8 @@ const PastRequests = () => {
     return (
         <div className="past-requests-container">
             <div className="past-requests-content">
-                <h2 className="past-requests-title">Porudzbine</h2>
+                {orders.length > 0 && <h2 className="past-requests-title">Porudzbine</h2>}
+                {orders.length === 0 && <h2 className="past-requests-title">Nemate porudzbine!</h2>}
                 {orders.map((order) => (
                     <div key={order.id}>
                         <table className="past-requests-table-order">

@@ -23,21 +23,35 @@ namespace Projekat.Controllers
         [Authorize(Roles = "admin,prodavac")]
         public IActionResult GetVerification(long userId)
         {
-            return Ok(_verificationService.GetByUserId(userId));
+            VerificationDto verificationDto = _verificationService.GetByUserId(userId);
+            if (verificationDto == null)
+            {
+                return BadRequest("Desila se greska prilikom preuzimanja verifikacije!");
+            }
+            return Ok(verificationDto);
         }
 
         [HttpGet("all")]
         [Authorize(Roles = "admin")]
         public IActionResult GetAll()
         {
-            return Ok(_verificationService.GetAll());
+            List<VerificationDto> verifications = new List<VerificationDto>();
+            verifications = _verificationService.GetAll();
+            if (verifications == null)
+            {
+                return BadRequest("Desila se greska prilikom preuzimanja svih verifikacija!");
+            }
+            return Ok(verifications);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
         public IActionResult UpdateVerification(long id, [FromBody] VerificationDto verificationDto)
         {
-            return Ok(_verificationService.UpdateVerification(id, verificationDto));
+            VerificationDto verification = _verificationService.UpdateVerification(id, verificationDto);
+            if(verification == null)
+                return BadRequest("Desila se greska prilikom izmjene verifikacije!");
+            return Ok(verification);
         }
     }
 }

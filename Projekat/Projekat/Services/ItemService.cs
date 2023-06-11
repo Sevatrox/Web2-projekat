@@ -21,41 +21,73 @@ namespace Projekat.Services
 
         public ItemDto CreateItem(ItemDto itemCreate)
         {
-            Item item = _mapper.Map<Item>(itemCreate);
-            _dataContext.Items.Add(item);
-            _dataContext.SaveChanges();
+            try
+            {
+                Item item = _mapper.Map<Item>(itemCreate);
+                _dataContext.Items.Add(item);
+                _dataContext.SaveChanges();
 
-            return _mapper.Map<ItemDto>(item);
+                return _mapper.Map<ItemDto>(item);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
 
         public List<ItemDto> GetItemsBySellerId(long sellerId)
         {
-            return _mapper.Map<List<ItemDto>>(_dataContext.Items.ToList().FindAll(x => x.SellerId == sellerId));
+            try
+            {
+                return _mapper.Map<List<ItemDto>>(_dataContext.Items.ToList().FindAll(x => x.SellerId == sellerId));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
-        public void DeleteItem(long id)
+        public bool DeleteItem(long id)
         {
-            Item item = _dataContext.Items.Find(id);
+            try
+            {
+                Item item = _dataContext.Items.Find(id);
 
-            _dataContext.Items.Remove(item);
+                _dataContext.Items.Remove(item);
 
-            _dataContext.SaveChanges();
+                _dataContext.SaveChanges();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
 
         public ItemDto UpdateItem(long id, ItemDto newItem)
         {
-            Item noviUser = _mapper.Map<Item>(newItem);
-            Item itemDB = _dataContext.Items.Find(id);
+            try
+            {
+                Item noviUser = _mapper.Map<Item>(newItem);
+                Item itemDB = _dataContext.Items.Find(id);
 
-            itemDB.Name = noviUser.Name;
-            itemDB.Price = noviUser.Price;
-            itemDB.Picture = noviUser.Picture;
-            itemDB.Amount = noviUser.Amount;
-            itemDB.Description = noviUser.Description;
+                itemDB.Name = noviUser.Name;
+                itemDB.Price = noviUser.Price;
+                itemDB.Picture = noviUser.Picture;
+                itemDB.Amount = noviUser.Amount;
+                itemDB.Description = noviUser.Description;
 
-            _dataContext.SaveChanges();
+                _dataContext.SaveChanges();
 
-            return _mapper.Map<ItemDto>(itemDB);
+                return _mapper.Map<ItemDto>(itemDB);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public ItemDto UpdateItemAfterOrder(long id, int amount)
@@ -70,7 +102,14 @@ namespace Projekat.Services
 
         public List<ItemDto> GetAll()
         {
-            return _mapper.Map<List<ItemDto>>(_dataContext.Items.ToList());
+            try
+            {
+                return _mapper.Map<List<ItemDto>>(_dataContext.Items.ToList());
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public ItemDto GetItemById(long id)
@@ -80,15 +119,23 @@ namespace Projekat.Services
 
         public List<ItemDto> GetItemsByOrderId(long orderId)
         {
-            List<ItemsInsideOrderDto> itemsInsideOrderDto = _mapper.Map<List<ItemsInsideOrderDto>>(_dataContext.ItemsInsideOrders.ToList().FindAll(x => x.OrderId == orderId));
-            List<ItemDto> items = new List<ItemDto>();
-            foreach (var item in itemsInsideOrderDto)
+            try
             {
-                ItemDto itemDB = GetItemById(item.ItemId);
-                itemDB.Amount = item.Amount;
-                items.Add(itemDB);
+                List<ItemsInsideOrderDto> itemsInsideOrderDto = _mapper.Map<List<ItemsInsideOrderDto>>(_dataContext.ItemsInsideOrders.ToList().FindAll(x => x.OrderId == orderId));
+                List<ItemDto> items = new List<ItemDto>();
+                foreach (var item in itemsInsideOrderDto)
+                {
+                    ItemDto itemDB = GetItemById(item.ItemId);
+                    itemDB.Amount = item.Amount;
+                    items.Add(itemDB);
+                }
+                return items;
             }
-            return items;
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
     }
 }

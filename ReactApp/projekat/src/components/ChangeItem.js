@@ -80,7 +80,7 @@ const ChangeItem = () => {
 
   return (
     <div className="add-item">
-      <h2>Dodaj artikal</h2>
+      <h2>Izmjeni artikal</h2>
       <form onSubmit={handleSubmit}>
         <label>Naziv: </label>
         <input

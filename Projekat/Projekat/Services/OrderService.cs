@@ -23,125 +23,171 @@ namespace Projekat.Services
 
         public OrderDto CreateOrder(OrderDto orderDto)
         {
-            Order order = _mapper.Map<Order>(orderDto);
-            order.Status = OrderStatus.IN_PROCESS;
-            DateTime orderTime = DateTime.ParseExact(order.OrderTime, "M/d/yyyy, h:mm:ss tt", CultureInfo.InvariantCulture);
-            int rng = GetNumber();
-            DateTime targetTime = orderTime.AddMinutes(rng);
-            order.OrderArriving = targetTime.ToString("M/d/yyyy, h:mm:ss tt", CultureInfo.InvariantCulture);
-
-            _dataContext.Orders.Add(order);
-            _dataContext.SaveChanges();
-
-            int counter = 0;
-            foreach (var itemId in orderDto.Ids)
+            try
             {
-                ItemDto item= _itemService.UpdateItemAfterOrder(itemId, orderDto.Amounts[counter]);
+                Order order = _mapper.Map<Order>(orderDto);
+                order.Status = OrderStatus.IN_PROCESS;
+                DateTime orderTime = DateTime.ParseExact(order.OrderTime, "M/d/yyyy, h:mm:ss tt", CultureInfo.InvariantCulture);
+                int rng = GetNumber();
+                DateTime targetTime = orderTime.AddMinutes(rng);
+                order.OrderArriving = targetTime.ToString("M/d/yyyy, h:mm:ss tt", CultureInfo.InvariantCulture);
 
-                ItemsInsideOrderDto itemOrderDto = new ItemsInsideOrderDto();
-                itemOrderDto.ItemId = itemId;
-                itemOrderDto.OrderId = order.Id;
-                itemOrderDto.Amount = orderDto.Amounts[counter];
-
-                ItemsInsideOrder itemOrder = _mapper.Map<ItemsInsideOrder>(itemOrderDto);
-
-                _dataContext.ItemsInsideOrders.Add(itemOrder); 
+                _dataContext.Orders.Add(order);
                 _dataContext.SaveChanges();
 
-                counter++;
-            }
+                int counter = 0;
+                foreach (var itemId in orderDto.Ids)
+                {
+                    ItemDto item = _itemService.UpdateItemAfterOrder(itemId, orderDto.Amounts[counter]);
 
-            return _mapper.Map<OrderDto>(order);
+                    ItemsInsideOrderDto itemOrderDto = new ItemsInsideOrderDto();
+                    itemOrderDto.ItemId = itemId;
+                    itemOrderDto.OrderId = order.Id;
+                    itemOrderDto.Amount = orderDto.Amounts[counter];
+
+                    ItemsInsideOrder itemOrder = _mapper.Map<ItemsInsideOrder>(itemOrderDto);
+
+                    _dataContext.ItemsInsideOrders.Add(itemOrder);
+                    _dataContext.SaveChanges();
+
+                    counter++;
+                }
+
+                return _mapper.Map<OrderDto>(order);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            
         }
 
         public List<OrderCancelCheckDto> GetOrdersByBuyerId(long buyerId)
         {
-            List<Order> orders = _dataContext.Orders.ToList().FindAll(x => x.BuyerId == buyerId && x.Status != OrderStatus.CANCELED);
-            List<int> otkazi = new List<int>();
-            int otkaz = 0;
-            foreach (var order in orders)
+            try
             {
-                if(order.Status == OrderStatus.IN_PROCESS)
+                List<Order> orders = _dataContext.Orders.ToList().FindAll(x => x.BuyerId == buyerId && x.Status != OrderStatus.CANCELED);
+                List<int> otkazi = new List<int>();
+                int otkaz = 0;
+                foreach (var order in orders)
                 {
-                    Tuple<int, int> rezultat = CalculateTime(order.OrderTime, order.OrderArriving, otkaz);
+                    if (order.Status == OrderStatus.IN_PROCESS)
+                    {
+                        Tuple<int, int> rezultat = CalculateTime(order.OrderTime, order.OrderArriving, otkaz);
 
-                    if(rezultat.Item1 == 1)
-                        otkazi.Add(1);
+                        if (rezultat.Item1 == 1)
+                            otkazi.Add(1);
+                        else
+                            otkazi.Add(0);
+                        otkaz = 0;
+
+                        if (rezultat.Item2 == 1)
+                        {
+                            order.Status = OrderStatus.DONE;
+                            _dataContext.SaveChanges();
+                        }
+                    }
                     else
                         otkazi.Add(0);
-                    otkaz = 0;
-
-                    if(rezultat.Item2 == 1)
-                    {
-                        order.Status = OrderStatus.DONE;
-                        _dataContext.SaveChanges();
-                    }
                 }
-                else
-                    otkazi.Add(0);
-            }
-            List<OrderCancelCheckDto> orderCancelCheckDtos = _mapper.Map<List<OrderCancelCheckDto>>(orders);
-            int counter = 0;
-            foreach (var order in orderCancelCheckDtos)
-            {
-                order.Cancel = otkazi[counter];
-                counter++;
-            }
+                List<OrderCancelCheckDto> orderCancelCheckDtos = _mapper.Map<List<OrderCancelCheckDto>>(orders);
+                int counter = 0;
+                foreach (var order in orderCancelCheckDtos)
+                {
+                    order.Cancel = otkazi[counter];
+                    counter++;
+                }
 
-            return orderCancelCheckDtos;
+                return orderCancelCheckDtos;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+           
         }
 
         public List<OrderDto> GetNewOrdersBySellerId(long sellerId)
         {
-            List<Order> orders = _dataContext.Orders.ToList().FindAll(x => x.SellerId == sellerId && x.Status != OrderStatus.CANCELED);
-            List<OrderDto> orderDtos = new List<OrderDto>();
-
-            foreach (var order in orders)
+            try
             {
-                if (order.Status == OrderStatus.IN_PROCESS)
+                List<Order> orders = _dataContext.Orders.ToList().FindAll(x => x.SellerId == sellerId && x.Status != OrderStatus.CANCELED);
+                List<OrderDto> orderDtos = new List<OrderDto>();
+
+                foreach (var order in orders)
                 {
-                    int temp = -1;
-                    Tuple<int, int> rezultat = CalculateTime(order.OrderTime, order.OrderArriving, temp);
-
-                    if (rezultat.Item2 == 1)
+                    if (order.Status == OrderStatus.IN_PROCESS)
                     {
-                        order.Status = OrderStatus.DONE;
-                        _dataContext.SaveChanges();
-                    }
-                    else
-                        orderDtos.Add(_mapper.Map<OrderDto>(order));
-                }
-            }
+                        int temp = -1;
+                        Tuple<int, int> rezultat = CalculateTime(order.OrderTime, order.OrderArriving, temp);
 
-            return orderDtos;
+                        if (rezultat.Item2 == 1)
+                        {
+                            order.Status = OrderStatus.DONE;
+                            _dataContext.SaveChanges();
+                        }
+                        else
+                            orderDtos.Add(_mapper.Map<OrderDto>(order));
+                    }
+                }
+
+                return orderDtos;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public List<OrderDto> GetPastOrdersBySellerId(long sellerId)
         {
-            List<Order> orders = _dataContext.Orders.ToList().FindAll(x => x.SellerId == sellerId && x.Status == OrderStatus.DONE);
-            return _mapper.Map<List<OrderDto>>(orders);
+            try
+            {
+                List<Order> orders = _dataContext.Orders.ToList().FindAll(x => x.SellerId == sellerId && x.Status == OrderStatus.DONE);
+                return _mapper.Map<List<OrderDto>>(orders);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public List<OrderDto> GetAll()
         {
-            return _mapper.Map<List<OrderDto>>(_dataContext.Orders.ToList());
+            try
+            {
+                return _mapper.Map<List<OrderDto>>(_dataContext.Orders.ToList());
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public OrderDto DeleteOrder(long id)
         {
-            List<ItemsInsideOrder> itemsInsideOrder = _dataContext.ItemsInsideOrders.ToList().FindAll(x => x.OrderId == id);
-            foreach (var item in itemsInsideOrder)
+            try
             {
-                Item itemDB = _dataContext.Items.Find(item.ItemId);
-                itemDB.Amount += item.Amount;
+                List<ItemsInsideOrder> itemsInsideOrder = _dataContext.ItemsInsideOrders.ToList().FindAll(x => x.OrderId == id);
+                foreach (var item in itemsInsideOrder)
+                {
+                    Item itemDB = _dataContext.Items.Find(item.ItemId);
+                    itemDB.Amount += item.Amount;
+                    _dataContext.SaveChanges();
+                }
+
+                Order order = _dataContext.Orders.Find(id);
+                order.Status = OrderStatus.CANCELED;
                 _dataContext.SaveChanges();
+
+                return _mapper.Map<OrderDto>(order);
             }
-
-            Order order = _dataContext.Orders.Find(id);
-            order.Status = OrderStatus.CANCELED;
-            _dataContext.SaveChanges();
-
-            return _mapper.Map<OrderDto>(order);
+            catch (Exception)
+            {
+                return null;
+            }
+            
         }
 
         public static Tuple<int, int> CalculateTime(string orderTime, string orderArriving, int otkaz)

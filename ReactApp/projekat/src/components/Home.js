@@ -6,13 +6,7 @@ const Home = () => {
     const isLoggedIn = GetToken() !== null;
 
     const handleLogout = () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
-      localStorage.removeItem("email");
-      localStorage.removeItem("user");
-      localStorage.removeItem("verification")
-      localStorage.removeItem('item');
-      localStorage.removeItem('basket');
+      localStorage.clear();
       history("/");
       window.location.reload();
     };

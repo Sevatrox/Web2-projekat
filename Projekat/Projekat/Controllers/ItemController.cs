@@ -23,28 +23,49 @@ namespace Projekat.Controllers
         [Authorize(Roles = "prodavac")]
         public IActionResult CreateItem([FromBody] ItemDto itemCreateDto)
         {
-            return Ok(_itemService.CreateItem(itemCreateDto));
+            ItemDto item = _itemService.CreateItem(itemCreateDto);
+            if (item == null)
+            {
+                return BadRequest("Desila se greska prilikom kreiranja proizvoda!");
+            }
+            return Ok(item);
         }
 
         [HttpGet("{sellerId}")]
         [Authorize(Roles = "prodavac")]
         public IActionResult GetItemsBySellerId(long sellerId)
         {
-            return Ok(_itemService.GetItemsBySellerId(sellerId));
+            List<ItemDto> items = new List<ItemDto>();
+            items = _itemService.GetItemsBySellerId(sellerId);
+            if(items == null)
+            {
+                return BadRequest("Desila se greska prilikom pretrage proizvoda!");
+            }
+            return Ok(items);
         }
 
         [HttpGet("byOrder/{orderId}")]
         [Authorize(Roles = "kupac,prodavac,admin")]
         public IActionResult GetItemsByOrderId(long orderId)
         {
-            return Ok(_itemService.GetItemsByOrderId(orderId));
+            List<ItemDto> items = new List<ItemDto>();
+            items = _itemService.GetItemsByOrderId(orderId);
+            if(items == null)
+            {
+                return BadRequest("Desila se greska prilikom pretrage proizvoda!");
+            }
+            return Ok(items);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "prodavac")]
         public IActionResult DeleteItem(long id)
         {
-            _itemService.DeleteItem(id);
+            bool result = _itemService.DeleteItem(id);
+            if (result == false)
+            {
+                return BadRequest("Desila se greska prilikom brisanja proizvoda!");
+            }
             return Ok();
         }
 
@@ -52,14 +73,24 @@ namespace Projekat.Controllers
         [Authorize(Roles = "prodavac")]
         public IActionResult UpdateItem(long id, [FromBody] ItemDto itemDto)
         {
-            return Ok(_itemService.UpdateItem(id, itemDto));
+            ItemDto item = _itemService.UpdateItem(id, itemDto);
+            if(item == null)
+            {
+                return BadRequest("Desila se greska prilikom izmjene proizvoda!");
+            }
+            return Ok(item);
         }
 
         [HttpGet("all")]
         [Authorize(Roles = "kupac")]
         public IActionResult GetAll()
         {
-            return Ok(_itemService.GetAll());
+            List<ItemDto> items = _itemService.GetAll();
+            if(items == null)
+            {
+                return BadRequest("Desila se greska prilikom dobavljanja svih proizvoda!");
+            }
+            return Ok(items);
         }
     }
 }

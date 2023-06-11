@@ -50,21 +50,31 @@ namespace Projekat.Controllers
         [Authorize(Roles = "kupac,admin,prodavac")]
         public IActionResult GetUser(string email)
         {
-            return Ok(_userService.GetByEmail(email));
+            UserRegisterDto userRegisterDto = _userService.GetByEmail(email);
+            if (userRegisterDto == null)
+                return BadRequest("Desila se greska prilikom preuzimanja korisnika!");
+            return Ok(userRegisterDto);
         }
 
         [HttpGet("all")]
         [Authorize(Roles = "admin")]
         public IActionResult GetAll()
         {
-            return Ok(_userService.GetAll());
+            List<UserRegisterDto> users = new List<UserRegisterDto>();
+            users = _userService.GetAll();
+            if(users == null)
+                return BadRequest("Desila se greska prilikom preuzimanja svih korisnika!");
+            return Ok(users);
         }
 
         [HttpGet("id/{id}")]
         [Authorize(Roles = "kupac,prodavac, admin")]
         public IActionResult GetUserById(long id)
         {
-            return Ok(_userService.GetUserById(id));
+            UserRegisterDto userRegister = _userService.GetUserById(id);
+            if (userRegister == null)
+                return BadRequest("Desila se greska prilikom preuzimanja korisnika!");
+            return Ok(userRegister);
         }
 
         [HttpPut("{id}")]
@@ -78,7 +88,7 @@ namespace Projekat.Controllers
             }
             else
             {
-                return BadRequest("User with same email address already exists!");
+                return BadRequest("Korisnik sa istom email adresom vec postoji!");
             }
         }
     }

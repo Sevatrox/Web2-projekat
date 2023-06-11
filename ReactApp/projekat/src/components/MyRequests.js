@@ -52,7 +52,7 @@ const MyRequests = () => {
     return ( 
         <div className="past-requests-container">
         <div className="past-requests-content">
-            { orders.length > 0 && <h2 className="past-requests-title">Stare porudzbine</h2>}
+            {orders.length > 0 && <h2 className="past-requests-title">Stare porudzbine</h2>}
             {orders.length === 0 && <h2 className="past-requests-title">Nemate starih porudzbina!</h2>}
             {orders.length > 0 && orders.map((order) => (
                 <div key={order.id}>

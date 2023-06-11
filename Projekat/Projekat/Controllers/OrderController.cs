@@ -23,43 +23,70 @@ namespace Projekat.Controllers
         [Authorize(Roles = "kupac")]
         public IActionResult CreateOrder([FromBody] OrderDto orderDto)
         {
-            return Ok(_orderService.CreateOrder(orderDto));
+            OrderDto order = _orderService.CreateOrder(orderDto);
+            if (order == null)
+                return BadRequest("Desila se greska prilikom kreiranja porudzbine!");
+            return Ok(order);
         }
 
         [HttpGet("buyer/{buyerId}")]
         [Authorize(Roles = "kupac")]
         public IActionResult GetOrdersByBuyerId(long buyerId)
         {
-            return Ok(_orderService.GetOrdersByBuyerId(buyerId));
+            List<OrderCancelCheckDto> orders = new List<OrderCancelCheckDto>();
+            orders = _orderService.GetOrdersByBuyerId(buyerId);
+            if(orders == null)
+                return BadRequest("Desila se greska prilikom preuzimanja porudzbina!");
+            return Ok(orders);
         }
 
         [HttpGet("newOrders/{sellerId}")]
         [Authorize(Roles = "prodavac")]
         public IActionResult GetNewOrdersBySellerId(long sellerId)
         {
-            return Ok(_orderService.GetNewOrdersBySellerId(sellerId));
+            List<OrderDto> orders = new List<OrderDto>();
+            orders = _orderService.GetNewOrdersBySellerId(sellerId);
+            if(orders == null)
+            {
+                return BadRequest("Desila se greska prilikom preuzimanja porudzbina!");
+            }
+            return Ok(orders);
         }
 
         [HttpGet("pastOrders/{sellerId}")]
         [Authorize(Roles = "prodavac")]
         public IActionResult GetPastOrdersBySellerId(long sellerId)
         {
-            return Ok(_orderService.GetPastOrdersBySellerId(sellerId));
+            List<OrderDto> orders = new List<OrderDto>();
+            orders = _orderService.GetPastOrdersBySellerId(sellerId);
+            if (orders == null)
+            {
+                return BadRequest("Desila se greska prilikom preuzimanja porudzbina!");
+            }
+            return Ok(orders);
         }
 
         [HttpGet("all")]
         [Authorize(Roles = "admin")]
         public IActionResult GetAll()
         {
-            return Ok(_orderService.GetAll());
+            List<OrderDto> orders = new List<OrderDto>();
+            orders = _orderService.GetAll();
+            if (orders == null)
+            {
+                return BadRequest("Desila se greska prilikom preuzimanja porudzbina!");
+            }
+            return Ok(orders);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "kupac")]
         public IActionResult DeleteOrder(long id)
         {
-            _orderService.DeleteOrder(id);
-            return Ok();
+            OrderDto order = _orderService.DeleteOrder(id);
+            if(order == null)
+                return BadRequest("Desila se greska prilikom brisanja porudzbine!");
+            return Ok(order);
         }
     }
 }

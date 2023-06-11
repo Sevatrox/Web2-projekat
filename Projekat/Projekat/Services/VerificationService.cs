@@ -31,23 +31,45 @@ namespace Projekat.Services
 
         public List<VerificationDto> GetAll()
         {
-            return _mapper.Map<List<VerificationDto>>(_dataContext.Verifications.ToList());
+            try
+            {
+                return _mapper.Map<List<VerificationDto>>(_dataContext.Verifications.ToList());
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public VerificationDto GetByUserId(long userId)
         {
-            return _mapper.Map<VerificationDto>(_dataContext.Verifications.First(x => x.UserId == userId));
+            try
+            {
+                return _mapper.Map<VerificationDto>(_dataContext.Verifications.First(x => x.UserId == userId));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public VerificationDto UpdateVerification(long id, VerificationDto newVerification)
         {
-            Verification noviUser = _mapper.Map<Verification>(newVerification);
-            Verification verificationDB = _dataContext.Verifications.Find(id);
+            try
+            {
+                Verification noviUser = _mapper.Map<Verification>(newVerification);
+                Verification verificationDB = _dataContext.Verifications.Find(id);
 
-            verificationDB.Status = noviUser.Status;
-             _dataContext.SaveChanges();
+                verificationDB.Status = noviUser.Status;
+                _dataContext.SaveChanges();
 
-            return _mapper.Map<VerificationDto>(verificationDB);
+                return _mapper.Map<VerificationDto>(verificationDB);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
     }
 }

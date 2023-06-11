@@ -97,17 +97,39 @@ namespace Projekat.Services
 
         public UserRegisterDto GetByEmail(string email)
         {
-            return _mapper.Map<UserRegisterDto>(_dataContext.Users.First(x => x.Email == email));
+            try
+            {
+                return _mapper.Map<UserRegisterDto>(_dataContext.Users.First(x => x.Email == email));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public List<UserRegisterDto> GetAll()
         {
-            return _mapper.Map<List<UserRegisterDto>>(_dataContext.Users.ToList().FindAll(x => x.Type != UserType.ADMIN));
+            try
+            {
+                return _mapper.Map<List<UserRegisterDto>>(_dataContext.Users.ToList().FindAll(x => x.Type != UserType.ADMIN));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public UserRegisterDto GetUserById(long id)
         {
-            return _mapper.Map<UserRegisterDto>(_dataContext.Users.Find(id));
+            try
+            {
+                return _mapper.Map<UserRegisterDto>(_dataContext.Users.Find(id));
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public UserRegisterDto UpdateUser(long id, UserRegisterDto newUser)

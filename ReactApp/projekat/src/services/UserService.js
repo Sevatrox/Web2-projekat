@@ -61,7 +61,6 @@ export const AuthUser = () =>
     else
     {
         const role = GetRole();
-        console.log(role);
         if(role === "prodavac")
             return GetVerification();
         return role;
