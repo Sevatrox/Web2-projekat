@@ -5,9 +5,11 @@ import { GetUser, userModel } from "../models/UserModel";
 import { GetPastOrdersBySellerId } from "../services/OrderService";
 import { orderModel } from "../models/OrderModel";
 import { itemModel } from "../models/ItemModel";
+import { useNavigate } from "react-router-dom";
 
 const MyRequests = () => {
     const [orders, setOrders] = useState([]);
+    const history = useNavigate();
 
     useEffect(() => {
         getData();
@@ -39,6 +41,11 @@ const MyRequests = () => {
                     const orderWithItems = { ...updatedOrder, items: itemsResponse };
                     ordersWithItems.push(orderWithItems);
                 } catch (error) {
+                    if(error.response.status === 401 || error.response.status === 403)
+                    {
+                      localStorage.clear();
+                      history('/');
+                    }
                     console.error("Desila se greska:", error);
                     continue;
                 }
@@ -46,6 +53,11 @@ const MyRequests = () => {
             console.log(ordersWithItems);
             setOrders(ordersWithItems);
         } catch (e) {
+            if(e.response.status === 401 || e.response.status === 403)
+            {
+              localStorage.clear();
+              history('/');
+            }
             alert("Desila se greska: " + e);
         }
     };

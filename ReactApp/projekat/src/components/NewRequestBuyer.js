@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GetAllItems } from '../services/ItemService';
 import { GetUserById } from '../services/UserService';
 import { itemModel, SetBasket } from '../models/ItemModel';
@@ -10,6 +10,7 @@ const NewRequestBuyer = () => {
   const [itemsOrder, setItemsOrder] = useState([]);
   const [amounts, setAmounts] = useState([]);
   const [errors, setErrors] = useState([]);
+  const history = useNavigate();
 
   useEffect(() => {
     getData();
@@ -28,6 +29,11 @@ const NewRequestBuyer = () => {
       setAmounts(Array(itemResponse.length).fill(1));
       setErrors(Array(itemResponse.length).fill(''));
     } catch (error) {
+      if(error.response.status === 401 || error.response.status === 403)
+      {
+        localStorage.clear();
+        history('/');
+      }
       console.error('Desila se greska:', error);
     }
   };
@@ -50,6 +56,11 @@ const NewRequestBuyer = () => {
           sellerUsername = seller.username;
           sellers[sellerId] = sellerUsername;
         } catch (error) {
+          if(error.response.status === 401 || error.response.status === 403)
+          {
+            localStorage.clear();
+            history('/');
+          }
           console.error('Desila se greska:', error);
           continue;
         }

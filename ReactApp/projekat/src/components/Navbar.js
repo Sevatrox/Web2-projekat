@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GetRole, GetToken, SetUser, userModel } from "../models/UserModel";
 import { GetVerification } from '../models/VerificationModel';
-import { GetUserFromBackend } from '../services/UserService';
+import { AuthUser, GetUserFromBackend } from '../services/UserService';
 
 const Navbar = () => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(GetToken() !== null);
     const [role, setRole] = useState(GetRole());
     const [isVerified, setIsVerified] = useState(false);
+    const history = useNavigate();
 
     useEffect(() => {
       setIsLoggedIn(GetToken() !== null);
@@ -28,8 +29,17 @@ const Navbar = () => {
 
     const getData = async () => {
       let user = userModel;
-      const response = await GetUserFromBackend();
-      user = response.data;
+      try{
+        const response = await GetUserFromBackend();
+        user = response.data;
+      }
+      catch(e){
+        if(e.response.status === 401 || e.response.status === 403)
+        {
+          localStorage.clear();
+          history('/');
+        }
+      }
 
       const temp = user;
       if (user.type === 1)

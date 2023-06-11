@@ -33,9 +33,13 @@ const Items = () => {
     const handleDelete = async (itemId) => {
         try {
             const response = await DeleteItem(itemId);
-            console.log(response);
+            console.log(response.data);
           } catch (error) {
-            console.log(error);
+            if(error.response.status === 401 || error.response.status === 403)
+            {
+              localStorage.clear();
+              history('/');
+            }
           }
         getItems();
     };

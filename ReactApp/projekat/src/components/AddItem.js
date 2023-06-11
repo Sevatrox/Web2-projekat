@@ -59,6 +59,11 @@ const AddItem = () => {
             history("/artikli");      
         }
         catch(e){
+            if(e.response.status === 401 || e.response.status === 403)
+            {
+              localStorage.clear();
+              history('/');
+            }
             alert('Desila se greska!');
         }
     }

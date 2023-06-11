@@ -82,6 +82,11 @@ const ProfileChange = () => {
             history("/profil");      
         }
         catch(e){
+          if(e.response.status === 401 || e.response.status === 403)
+          {
+            localStorage.clear();
+            history('/');
+          }
             alert('Vec postoji korisnik sa tom email adresom! Unesite drugu email adresu!');
         }
     }

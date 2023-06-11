@@ -70,6 +70,11 @@ const MakeRequest = () => {
             alert("Uspjesno ste napravili narudzbinu!");
             history("/");
         } catch (e) {
+            if(e.response.status === 401 || e.response.status === 403)
+            {
+              localStorage.clear();
+              history('/');
+            }
             alert("Desila se greska prilikom pravljenja narudzbine!");
         }
     }

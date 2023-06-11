@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { GetAllVerifications, UpdateVerification } from '../services/VerificationService';
 import { GetAllUsers } from '../services/UserService';
 import emailjs from '@emailjs/browser';
+import { useNavigate } from 'react-router-dom';
 
 const Verification = () => {
   const [verifications, setVerifications] = useState([]);
   const [sellers, setSellers] = useState([]);
+  const history = useNavigate();
 
 
   useEffect(() => {
@@ -14,26 +16,36 @@ const Verification = () => {
   }, []);
 
   const getVerifications = async () => {
-    const response = await GetAllVerifications();
-    const transformedData = response.data.map(item => {
-      let status = '';
-
-      if (item.status === 0) {
-        status = 'In process';
-      } else if (item.status === 1) {
-        status = 'Accepted';
-      } else if (item.status === 2) {
-        status = 'Denied';
+    try{
+      const response = await GetAllVerifications();
+      const transformedData = response.data.map(item => {
+        let status = '';
+  
+        if (item.status === 0) {
+          status = 'In process';
+        } else if (item.status === 1) {
+          status = 'Accepted';
+        } else if (item.status === 2) {
+          status = 'Denied';
+        }
+  
+        return {
+          id: item.id,
+          userId: item.userId,
+          status: status
+        };
+      });
+  
+      setVerifications(transformedData)
+    }
+    catch(e){
+      if(e.response.status === 401 || e.response.status === 403)
+      {
+        localStorage.clear();
+        history('/');
       }
+    }
 
-      return {
-        id: item.id,
-        userId: item.userId,
-        status: status
-      };
-    });
-
-    setVerifications(transformedData)
   }
 
   const getSellers = async () => {

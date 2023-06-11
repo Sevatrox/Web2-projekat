@@ -38,12 +38,21 @@ const Login = () => {
     }
 
     const LoginWithGoogle = async (user) => {
-        const response = await LoginGoogle(user);
-        SetToken(response.data);
-        SetRole(jwt(response.data));
-        SetEmail(user.email);
-        history("/");     
-        window.location.reload();
+        try{
+            const response = await LoginGoogle(user);
+            SetToken(response.data);
+            SetRole(jwt(response.data));
+            SetEmail(user.email);
+            history("/");     
+            window.location.reload();
+        }
+        catch(e){
+            if(e.response.status === 401 || e.response.status === 403)
+            {
+              localStorage.clear();
+              history('/');
+            }
+        }
     }
 
     const handleSubmit = async(e) => {
@@ -80,27 +89,42 @@ const Login = () => {
             window.location.reload()
         }
         catch(e){
+            if(e.response.status === 401 || e.response.status === 403)
+            {
+              localStorage.clear();
+              history('/');
+            }
             alert('Ne postoji account sa tim email i lozinkom! Pokusajte ponovo.');
             history("/login");
         }
     }
 
     const CheckVerification = async(token) => {
-        const responseUser = await GetUserAfterLogin(token);
-        const response = await GetVerificationFromBackend(responseUser.data.id, token);
-        if(response.data.status === 0)
-        {
-          SetVerification('In process');
+        try{
+            const responseUser = await GetUserAfterLogin(token);
+            const response = await GetVerificationFromBackend(responseUser.data.id, token);
+            if(response.data.status === 0)
+            {
+              SetVerification('In process');
+            }
+            else if(response.data.status === 1)
+            {
+              SetVerification('Accepted');
+            }
+            else
+            {
+              SetVerification('Denied');
+            }
         }
-        else if(response.data.status === 1)
-        {
-          SetVerification('Accepted');
+        catch(e){
+            if(e.response.status === 401 || e.response.status === 403)
+            {
+              localStorage.clear();
+              history('/');
+            }
         }
-        else
-        {
-          SetVerification('Denied');
-        }
-      }
+        
+    }
 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
