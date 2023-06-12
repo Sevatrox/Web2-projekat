@@ -100,7 +100,7 @@ const MakeRequest = () => {
                         {parsedItems.map(item => (
                             <tr key={item.id}>
                                 <td>{item.name}</td>
-                                <td>{item.price}</td>
+                                <td>{item.price} €</td>
                                 <td>{item.amount}</td>
                                 <td>{item.description}</td>
                                 <td>{item.picture}</td>
@@ -110,7 +110,7 @@ const MakeRequest = () => {
                     </tbody>
                 </table>
                 <br />
-                <label className="cijena">Ukupna cijena svih proizvoda je: {cijena} + {cijenaDostave} dostava.</label>
+                <label className="cijena">Ukupna cijena svih proizvoda je: {cijena} € + {cijenaDostave} € dostava.</label>
                 <br />
                 <form onSubmit={handleSubmit}>
                     <label>Dodatni komentar: </label>

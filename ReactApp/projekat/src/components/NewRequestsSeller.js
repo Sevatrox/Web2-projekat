@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetItemsByOrderId } from "../services/ItemService";
-import { calculateRemainingMinutes, GetNewOrdersBySellerId } from "../services/OrderService";
+import { calculateRemainingTime, GetNewOrdersBySellerId } from "../services/OrderService";
 import { GetUser, userModel } from "../models/UserModel";
 import { GetUserById } from "../services/UserService";
 import { orderModel } from "../models/OrderModel";
@@ -14,6 +14,23 @@ const NewRequestsSeller = () => {
     useEffect(() => {
         getData();
     }, []);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+          const updatedOrders = orders.map((order) => {
+            const remainingTime = calculateRemainingTime(order.orderArriving);
+            return {
+              ...order,
+              remainingTimeHours: remainingTime.hours,
+              remainingTimeMinutes: remainingTime.minutes,
+              remainingTimeSeconds: remainingTime.seconds
+            };
+          });
+          setOrders(updatedOrders);
+        }, 1000);
+    
+        return () => clearInterval(timer);
+    }, [orders]);
 
     const getData = async () => {
         try {
@@ -36,7 +53,8 @@ const NewRequestsSeller = () => {
                     buyerModel = buyerResponse.data;
 
                     const updatedOrder = { ...order, buyer: buyerModel.username };
-                    const orderWithItems = { ...updatedOrder, items: itemsResponseModel };
+                    const remainingTime = calculateRemainingTime(updatedOrder.orderArriving);
+                    const orderWithItems = { ...updatedOrder, remainingTimeHours : remainingTime.hours, remainingTimeMinutes : remainingTime.minutes, remainingTimeSeconds : remainingTime.seconds, items: itemsResponseModel };
                     ordersWithItems.push(orderWithItems);
                 } catch (error) {
                     if(error.response.status === 401 || error.response.status === 403)
@@ -81,7 +99,7 @@ const NewRequestsSeller = () => {
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{order.price}</td>
+                                <td>{order.price} €</td>
                                 <td>{order.comment}</td>
                                 <td>{order.address}</td>
                                 {(order.status === 0 && <td><label>U slanju</label></td>)}
@@ -89,7 +107,7 @@ const NewRequestsSeller = () => {
                                 <td>{order.orderTime}</td>
                                 <td>{order.orderArriving}</td>
                                 {(order.status === 1 && <td><label>0</label></td>)}
-                                {(order.status === 0 && <td><label>{calculateRemainingMinutes(order)} minuta</label></td>)}
+                                {(order.status === 0 && <td><label>{order.remainingTimeHours} sat, {order.remainingTimeMinutes} minuta, {order.remainingTimeSeconds} sekundi</label></td>)}
                                 <td>{order.buyer}</td>
                             </tr>
                         </tbody>
@@ -108,7 +126,7 @@ const NewRequestsSeller = () => {
                             {order.items.map((item) => (
                                 <tr key={item.id}>
                                     <td>{item.name}</td>
-                                    <td>{item.price}</td>
+                                    <td>{item.price} €</td>
                                     <td>{item.amount}</td>
                                     <td>{item.description}</td>
                                     <td>

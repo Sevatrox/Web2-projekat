@@ -125,7 +125,7 @@ const NewRequestBuyer = () => {
             {items.map((item, index) => (
               <tr key={item.id}>
                 <td>{item.name}</td>
-                <td>{item.price}</td>
+                <td>{item.price} €</td>
                 <td>{item.amount}</td>
                 <td>{item.description}</td>
                 <td>{item.picture}</td>

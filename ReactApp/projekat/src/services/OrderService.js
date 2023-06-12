@@ -31,10 +31,19 @@ export const GetAllOrders = async () =>
     return await axios.get(process.env.REACT_APP_API_URL + '/api/orders/all', config);
 }
 
-export const calculateRemainingMinutes = (order) => {
-    const orderArrivingTime = new Date(order.orderArriving);
-    const currentTime = new Date();
-    const remainingTime = orderArrivingTime - currentTime;
-    const remainingMinutes = Math.floor(remainingTime / 60000);
-    return remainingMinutes;
+export const calculateRemainingTime = (timeOfDelivery) => {
+    timeOfDelivery = new Date(timeOfDelivery);
+    const difference = timeOfDelivery.getTime() - new Date().getTime();
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    return {
+      days,
+      hours,
+      minutes,
+      seconds
+    };
 };

@@ -81,7 +81,7 @@ const MyRequests = () => {
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{order.price}</td>
+                                <td>{order.price} €</td>
                                 <td>{order.comment}</td>
                                 <td>{order.address}</td>
                                 <td>{order.orderTime}</td>
@@ -104,7 +104,7 @@ const MyRequests = () => {
                             {order.items.map((item) => (
                                 <tr key={item.id}>
                                     <td>{item.name}</td>
-                                    <td>{item.price}</td>
+                                    <td>{item.price} €</td>
                                     <td>{item.amount}</td>
                                     <td>{item.description}</td>
                                     <td>

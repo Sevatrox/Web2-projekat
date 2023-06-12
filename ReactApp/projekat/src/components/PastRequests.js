@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetUser, userModel } from "../models/UserModel";
-import { DeleteOrder, GetOrdersByBuyerId, calculateRemainingMinutes } from "../services/OrderService";
+import { DeleteOrder, GetOrdersByBuyerId, calculateRemainingTime } from "../services/OrderService";
 import { GetItemsByOrderId } from "../services/ItemService";
 import { GetUserById } from "../services/UserService";
 import { orderModel } from "../models/OrderModel";
@@ -14,6 +14,23 @@ const PastRequests = () => {
     useEffect(() => {
         getData();
     }, []);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+          const updatedOrders = orders.map((order) => {
+            const remainingTime = calculateRemainingTime(order.orderArriving);
+            return {
+              ...order,
+              remainingTimeHours: remainingTime.hours,
+              remainingTimeMinutes: remainingTime.minutes,
+              remainingTimeSeconds: remainingTime.seconds
+            };
+          });
+          setOrders(updatedOrders);
+        }, 1000);
+    
+        return () => clearInterval(timer);
+    }, [orders]);
 
     const getData = async () => {
         try {
@@ -49,8 +66,8 @@ const PastRequests = () => {
                         continue;
                     }
                 }
-
-                const orderWithItems = { ...order, items: updatedItems };
+                const remainingTime = calculateRemainingTime(order.orderArriving);
+                const orderWithItems = { ...order, remainingTimeHours : remainingTime.hours, remainingTimeMinutes : remainingTime.minutes, remainingTimeSeconds : remainingTime.seconds, items: updatedItems };
                 ordersWithItems.push(orderWithItems);
             }
             setOrders(ordersWithItems);
@@ -98,7 +115,7 @@ const PastRequests = () => {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{order.price}</td>
+                                    <td>{order.price} €</td>
                                     <td>{order.comment}</td>
                                     <td>{order.address}</td>
                                     {(order.status === 0 && <td><label>U slanju</label></td>)}
@@ -106,7 +123,7 @@ const PastRequests = () => {
                                     <td>{order.orderTime}</td>
                                     <td>{order.orderArriving}</td>
                                     {(order.status === 1 && <td><label>Dostavljeno</label></td>)}
-                                    {(order.status === 0 && <td><label>{calculateRemainingMinutes(order)} minuta</label></td>)}
+                                    {(order.status === 0 && <td><label>{order.remainingTimeHours} sat, {order.remainingTimeMinutes} minuta, {order.remainingTimeSeconds} sekundi</label></td>)}
                                     <td>
                                         {order.cancel === 1 ? (
                                             <button className="past-requests-button" onClick={() => handleOtkazi(order)}>
@@ -134,7 +151,7 @@ const PastRequests = () => {
                                 {order.items.map((item) => (
                                     <tr key={item.id}>
                                         <td>{item.name}</td>
-                                        <td>{item.price}</td>
+                                        <td>{item.price} €</td>
                                         <td>{item.amount}</td>
                                         <td>{item.description}</td>
                                         <td>

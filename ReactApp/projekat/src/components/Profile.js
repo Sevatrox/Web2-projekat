@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import test from './test.png'
+import duck from '../duck.jpg'
 import { GetUser, userModel } from "../models/UserModel";
 import { GetVerification } from "../models/VerificationModel";
 
@@ -30,7 +30,7 @@ const Profile = () => {
     <div className="profile-container">
       <h2>Profil: </h2>
       <div className="profile-picture">
-        <img src={test} alt="Profilna slika:" />
+        <img src={duck} alt="Profilna slika:" />
       </div>
       <div className="user-info">
         <div>
